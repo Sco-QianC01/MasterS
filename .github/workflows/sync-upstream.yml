@@ -1,0 +1,63 @@
+﻿name: Sync upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 3 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  UPSTREAM_REPOSITORY: swaylq/master-skill
+  TARGET_BRANCH: main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync upstream safely
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git remote add upstream "https://github.com/${UPSTREAM_REPOSITORY}.git"
+          git fetch origin "${TARGET_BRANCH}"
+          git fetch upstream "${TARGET_BRANCH}"
+          git checkout "${TARGET_BRANCH}"
+          git reset --hard "origin/${TARGET_BRANCH}"
+
+          if git merge --ff-only "upstream/${TARGET_BRANCH}"; then
+            git push origin "${TARGET_BRANCH}"
+            echo "Fast-forwarded from ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if git merge --no-edit "upstream/${TARGET_BRANCH}"; then
+            git push origin "${TARGET_BRANCH}"
+            echo "Merged upstream ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          {
+            echo "Upstream sync has conflicts and was left unchanged."
+            echo
+            echo "Conflicted files:"
+            git diff --name-only --diff-filter=U | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          git merge --abort || true
+          exit 0

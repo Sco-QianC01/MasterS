@@ -80,6 +80,19 @@ EXIT_CODES = {
 # Academic, standard bodies, government, journal publishers, well-known
 # canonical channels.
 PRIMARY_DOMAINS_EXACT: set[str] = {
+    # iter41 (amazon-operating-model 2026-07-04): The Amazon Way — Amazon's OWN
+    # first-party properties (company speaking about itself = originator primary):
+    # newsroom + investor relations (hosts the 1997-2021 shareholder letters) + the
+    # official Leadership Principles / careers site. Plus the Working Backwards authors'
+    # official concept site (Bryar & Carr, ex-Amazon execs who codified the mechanisms
+    # = originator) and the Q4 IR CDN serving Amazon's official shareholder-letter PDFs
+    # (issuer filing = first-hand). Media ABOUT Amazon (nytimes/geekwire/fortune/cnbc/
+    # firstround/commoncog/startuparchive) deliberately stays secondary — no washing.
+    "www.aboutamazon.com", "aboutamazon.com",          # Amazon 官方 newsroom(股东信/文化)
+    "ir.aboutamazon.com",                              # Amazon 投资者关系(股东信档案)
+    "www.amazon.jobs", "amazon.jobs",                  # 官方 Leadership Principles / careers
+    "www.workingbackwards.com", "workingbackwards.com",  # Bryar & Carr 官方机制站(originator)
+    "s2.q4cdn.com",                                     # Q4 IR CDN:Amazon 官方股东信 PDF(issuer)
     # iter (medical-aesthetics 2026-06-21): genuine first-hand domains for Chinese
     # medical aesthetics / injectables — global device & drug VENDOR official sites
     # (manufacturer = first-hand for their own 械字号/product spec), peer-reviewed
@@ -649,6 +662,53 @@ PRIMARY_DOMAINS_EXACT: set[str] = {
     "lumalabs.ai", "www.lumalabs.ai",                 # Luma Dream Machine 官方
     "ideogram.ai", "www.ideogram.ai",                 # Ideogram 官方
     "www.recraft.ai", "recraft.ai",                   # Recraft 官方
+    # Iter 40 (ad-agency-performance): HR/绩效/OKR/PSA(专业服务自动化) SaaS official
+    # sites + HR professional body + company officials. First-party product homepages
+    # (parallel to iter38 tool vendors). Generic for any HR / performance-mgmt /
+    # professional-services / agency-ops skill.
+    "beisen.com", "www.beisen.com",              # 北森 (绩效/HR SaaS)
+    "mokahr.com", "www.mokahr.com",              # Moka
+    "gaiaworks.cn", "www.gaiaworks.cn",          # 盖雅工场 (劳动力管理)
+    "worktile.com", "www.worktile.com",          # Worktile (OKR/项目)
+    "tita.com", "www.tita.com",                  # Tita (OKR/绩效)
+    "feishu.cn", "www.feishu.cn",                # 飞书 (字节; 绩效/OKR/项目)
+    "dingtalk.com", "www.dingtalk.com",          # 钉钉 (阿里)
+    "ihr360.com", "www.ihr360.com",              # i人事
+    "xrxs.com", "www.xrxs.com",                  # 薪人薪事
+    "scoro.com", "www.scoro.com",                # Scoro (agency PSA)
+    "productive.io", "www.productive.io",        # Productive (agency PSA)
+    "kantata.com", "www.kantata.com",            # Kantata/Mavenlink (PSA)
+    "getharvest.com", "www.getharvest.com",      # Harvest (工时)
+    "toggl.com", "www.toggl.com",                # Toggl Track
+    "clockify.me",                               # Clockify
+    "float.com", "www.float.com",                # Float (资源排期)
+    "forecast.app", "www.forecast.app",          # Forecast (PSA)
+    "lattice.com", "www.lattice.com",            # Lattice (绩效)
+    "15five.com", "www.15five.com",              # 15Five
+    "cultureamp.com", "www.cultureamp.com",      # Culture Amp
+    "betterworks.com", "www.betterworks.com",    # BetterWorks (OKR)
+    "workboard.com", "www.workboard.com",        # WorkBoard (OKR)
+    "shrm.org", "www.shrm.org",                  # SHRM (HR 专业协会,权威定义源)
+    "huawei.com", "www.huawei.com",              # 华为官方 (年报/绩效体系一手)
+    "cn.kyocera.com", "global.kyocera.com",      # 京瓷 (稻盛和夫阿米巴官方)
+    # iter40 cont'd: PM/BI SaaS officials + ad-industry bodies/awards + canon book sites
+    "teambition.com", "www.teambition.com",      # Teambition (阿里,项目)
+    "asana.com", "www.asana.com",                # Asana
+    "monday.com", "www.monday.com",              # monday.com
+    "www.tableau.com", "tableau.com",            # Tableau (BI)
+    "powerbi.microsoft.com",                     # Power BI (Microsoft)
+    "finebi.com", "www.finebi.com", "www.fanruan.com", "fanruan.com",  # 帆软 FineBI (BI)
+    "expertise.is", "www.expertise.is",          # David C. Baker《The Business of Expertise》书站
+    "tradecraft.is", "www.tradecraft.is",        # David C. Baker《Secret Tradecraft》书站
+    "performanceconsultants.com", "www.performanceconsultants.com",  # John Whitmore GROW 官方
+    "www.aaaa.org", "aaaa.org",                  # 4A's (美国广告代理协会)
+    "china4a.org", "www.china4a.org",            # 中国 4A
+    "china-caa.org", "www.china-caa.org",        # 中国广告协会
+    "sodaspeaks.com", "www.sodaspeaks.com",      # SoDA (数字代理协会)
+    "oneshow.org", "www.oneshow.org",            # The One Show (创意奖,创意评价基准)
+    "roifestival.com", "www.roifestival.com",    # 金投赏 ROI Festival
+    "ana.net", "www.ana.net",                    # ANA (美国全国广告主协会)
+    "www.ifac.org", "ifac.org",                  # 国际会计师联合会 (标准body)
 }
 
 # Suffix patterns for primary (TLD or sub-domain end-match).
@@ -690,6 +750,10 @@ PRIMARY_DOMAIN_SUFFIXES: tuple[str, ...] = (
 # Known author / podcast / personal blog primaries (heuristic).
 # This list is non-exhaustive — agent can extend per industry research.
 PRIMARY_PERSONAL_DOMAINS: set[str] = {
+    # iter41 (amazon-operating-model 2026-07-04): ex-Amazon insider & concept-originator
+    # own publications — first-hand accounts of mechanisms they personally operated.
+    "www.scarletink.com", "scarletink.com",            # Dave Anderson(前 Amazon Bar Raiser)亲历
+    "www.jimcollins.com", "jimcollins.com",            # Jim Collins 本人站(flywheel 概念原创者)
     # iter40 (photography): figure/estate own sites — author blogs + artist foundation
     "henricartierbresson.org", "www.henricartierbresson.org",  # Fondation HCB (作者基金会)
     # iter (crypto-onchain-trading): figure/author own blogs & self-hosted pubs
@@ -823,6 +887,22 @@ PRIMARY_PERSONAL_DOMAINS: set[str] = {
     # iter (aigc-creative-workflow 2026-06-22): figure's OWN academic/personal page —
     # Lvmin Zhang (ControlNet/Fooocus/IC-Light author) self-hosted homepage on github.io.
     "lllyasviel.github.io",                             # 张吕敏 Lvmin Zhang 本人学术主页 (ControlNet 作者)
+    # Iter 40 (ad-agency-performance): PSF/agency-management & performance canon
+    # authors' OWN sites / firm sites / podcasts. Generic for any professional-
+    # services / agency / management / performance-mgmt skill.
+    "davidmaister.com", "www.davidmaister.com",         # David Maister (Managing the PSF)
+    "punctuation.com", "www.punctuation.com",           # David C. Baker (agency expertise)
+    "2bobs.com", "www.2bobs.com",                       # Baker + Enns podcast
+    "winwithoutpitching.com", "www.winwithoutpitching.com",  # Blair Enns
+    "whatmatters.com", "www.whatmatters.com",           # John Doerr / OKR
+    "danpink.com", "www.danpink.com",                   # Daniel Pink (Drive)
+    "deming.org", "www.deming.org",                     # W. Edwards Deming Institute
+    "drucker.institute",                                # Drucker Institute (MBO)
+    "ignitiongroup.com", "www.ignitiongroup.com",       # Tim Williams (agency pricing/comp)
+    "farmerandco.com", "www.farmerandco.com",           # Michael Farmer (Farmer & Company)
+    "madisonavenuemanslaughter.com",                    # Michael Farmer 书官方站
+    "agencymanagementinstitute.com", "www.agencymanagementinstitute.com",  # Drew McLellan AMI
+    "buildabetteragency.libsyn.com",                    # AMI 播客 (Build a Better Agency)
 }
 
 # Substack / Beehiiv-hosted newsletters: primary IF subdomain looks like an

@@ -1,4 +1,4 @@
-﻿name: Sync upstream
+name: Sync upstream
 
 on:
   workflow_dispatch:
@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  UPSTREAM_REPOSITORY: swaylq/master-skill
   TARGET_BRANCH: main
+  UPSTREAM_REPOSITORY: swaylq/master-skill
 
 jobs:
   sync:
@@ -24,7 +24,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SYNC_UPSTREAM_TOKEN || github.token }}
+          persist-credentials: true
 
       - name: Sync upstream safely
         shell: bash
@@ -40,24 +41,42 @@ jobs:
           git checkout "${TARGET_BRANCH}"
           git reset --hard "origin/${TARGET_BRANCH}"
 
+          pushed=0
           if git merge --ff-only "upstream/${TARGET_BRANCH}"; then
-            git push origin "${TARGET_BRANCH}"
-            echo "Fast-forwarded from ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
+            if git diff --quiet "origin/${TARGET_BRANCH}"..HEAD; then
+              echo "Already up to date with ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
+            else
+              git push origin "${TARGET_BRANCH}"
+              pushed=1
+              echo "Fast-forwarded from ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          else
+            git merge --abort || true
+            if git merge --no-edit "upstream/${TARGET_BRANCH}"; then
+              git push origin "${TARGET_BRANCH}"
+              pushed=1
+              echo "Merged upstream ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "Upstream sync has conflicts and was left unchanged." >> "$GITHUB_STEP_SUMMARY"
+              echo "Conflicted files:" >> "$GITHUB_STEP_SUMMARY"
+              git diff --name-only --diff-filter=U | sed 's/^/- /' >> "$GITHUB_STEP_SUMMARY" || true
+              git merge --abort || true
+              exit 1
+            fi
           fi
 
-          if git merge --no-edit "upstream/${TARGET_BRANCH}"; then
-            git push origin "${TARGET_BRANCH}"
-            echo "Merged upstream ${UPSTREAM_REPOSITORY}:${TARGET_BRANCH}." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
+          # GitHub disables scheduled workflows in inactive public repositories.
+          # If no upstream change was pushed for a long time, create a tiny keepalive commit.
+          if [[ "$pushed" == "0" ]]; then
+            last_commit_ts=$(git log -1 --format=%ct "origin/${TARGET_BRANCH}")
+            now_ts=$(date -u +%s)
+            if (( now_ts - last_commit_ts > 3888000 )); then
+              mkdir -p .github
+              date -u +"last successful upstream check: %Y-%m-%dT%H:%M:%SZ" > .github/sync-upstream-keepalive.txt
+              git add .github/sync-upstream-keepalive.txt
+              if git commit -m "chore: keep upstream sync workflow active"; then
+                git push origin "${TARGET_BRANCH}"
+                echo "Created keepalive commit to keep scheduled workflow active." >> "$GITHUB_STEP_SUMMARY"
+              fi
+            fi
           fi
-
-          {
-            echo "Upstream sync has conflicts and was left unchanged."
-            echo
-            echo "Conflicted files:"
-            git diff --name-only --diff-filter=U | sed 's/^/- /'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          git merge --abort || true
-          exit 0

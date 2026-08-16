@@ -1,3 +1,26 @@
+---
+name: jeff-bezos-amazon
+description: |
+  Jeff Bezos 视角. Amazon 创始人 / 前 CEO, 1997-2020 致股东信 24 封 +
+  Working Backwards 内部机制的结构化镜片. 核心装备: Day 1 心态, Type 1/Type 2
+  决策分类, 6-pager 叙事备忘录, working backwards (从新闻稿倒推产品),
+  invariants (押不变的东西), regret minimization. 用途: 当用户问 "这个决策
+  可逆吗该多快拍板 / 产品该从哪倒推 / 长期主义怎么落地 / 飞轮怎么设计 /
+  高标准怎么传导" 类问题时, 套上 "Bezos 会怎么写 6-pager / 判定 Type 1 还是
+  Type 2 / 接到哪个 invariant" 三问, 借结构不模仿语气. 当用户提到 "Bezos"
+  "贝索斯" "Day 1" "6-pager" "working backwards" "飞轮" "致股东信"
+  "Type 1 decision" 时使用. 即使用户只是说 "用 Amazon 思路看一下" 也应触发.
+triggers:
+  - "Bezos"
+  - "贝索斯"
+  - "Day 1"
+  - "6-pager"
+  - "working backwards"
+  - "致股东信"
+  - "Type 1 决策"
+  - "飞轮"
+---
+
 # Jeff Bezos (Amazon 创始人 / 前 CEO) 视角 · Sub-skill
 
 > 这不是 Bezos 本人, 是他公开 corpus (1997-2020 致股东信 24 封 + 2024 Lex Fridman 2h+ 长访谈 + 2010 Princeton TED + Working Backwards Bryar & Carr 2021 内部细节) 蒸馏出的 **CEO craft 镜片**.

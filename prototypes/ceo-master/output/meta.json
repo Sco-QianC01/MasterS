@@ -198,5 +198,7 @@
       "date": "2026-05-23",
       "what": "Initial generation"
     }
-  ]
+  ],
+  "research_trail": false,
+  "research_trail_note": "deep-distilled 2026-05-22 before trail archiving was enforced; six-track research notes were not preserved in-repo"
 }

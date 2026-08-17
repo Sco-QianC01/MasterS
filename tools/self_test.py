@@ -20,6 +20,11 @@ import sys
 from pathlib import Path
 
 
+# Informational notes (e.g. flagged-legacy prototypes) — printed after the
+# per-prototype results, never counted as issues.
+INFO_NOTES: list = []
+
+
 def parse_frontmatter(text):
     """Parse YAML frontmatter. Returns (frontmatter dict, rest of text)."""
     if not text.startswith("---\n"):
@@ -106,25 +111,36 @@ def check_skill(prototype_dir, results):
                 if required not in ss_fm:
                     issues.append(f"sub_skill {ss.get('slug')} missing '{required}'")
 
-    # 5. SKILL.md sub-skill table paths exist
-    table_paths = re.findall(r'sub-skills/([a-z0-9-]+)/SKILL\.md', text)
-    for sp in set(table_paths):
-        ss_path = out / "sub-skills" / sp / "SKILL.md"
-        if not ss_path.exists():
-            issues.append(f"SKILL.md references missing sub-skill: sub-skills/{sp}/SKILL.md")
+    # 5. SKILL.md sub-skill table paths exist. Rows explicitly marked 待生成 /
+    # pending (skip_sub_skills mode declares them without distilling) are
+    # intentional forward references, not broken links.
+    for line in text.splitlines():
+        if "待生成" in line or "pending" in line.lower():
+            continue
+        for sp in set(re.findall(r'sub-skills/([a-z0-9-]+)/SKILL\.md', line)):
+            ss_path = out / "sub-skills" / sp / "SKILL.md"
+            if not ss_path.exists():
+                issues.append(f"SKILL.md references missing sub-skill: sub-skills/{sp}/SKILL.md")
 
-    # 6. research files
-    rdir = prototype_dir / "references" / "research"
-    expected = ["01-figures.md", "02-tools.md", "03-workflows.md",
-                "04-canon.md", "05-sources.md", "06-glossary.md"]
-    for f in expected:
-        if not (rdir / f).exists():
-            issues.append(f"research file missing: {f}")
+    # 6+7. research trail (six track files + synthesis.md). Prototypes whose
+    # meta.json declares `"research_trail": false` are legacy deep-distills
+    # whose notes were never archived in-repo — report informationally, don't
+    # fail them forever.
+    if meta.get("research_trail") is False:
+        INFO_NOTES.append(
+            f"{name}: no research trail (flagged legacy — {meta.get('research_trail_note', 'no note')})"
+        )
+    else:
+        rdir = prototype_dir / "references" / "research"
+        expected = ["01-figures.md", "02-tools.md", "03-workflows.md",
+                    "04-canon.md", "05-sources.md", "06-glossary.md"]
+        for f in expected:
+            if not (rdir / f).exists():
+                issues.append(f"research file missing: {f}")
 
-    # 7. synthesis.md exists
-    syn = prototype_dir / "references" / "synthesis.md"
-    if not syn.exists():
-        issues.append("references/synthesis.md missing")
+        syn = prototype_dir / "references" / "synthesis.md"
+        if not syn.exists():
+            issues.append("references/synthesis.md missing")
 
     # 8. CLI scripts exist + executable + no leftover placeholders + syntax OK
     cli_dir = out / "cli"
@@ -480,6 +496,9 @@ def main():
             for i in issues:
                 print(f"   - {i}")
             total_issues += len(issues)
+
+    for note in INFO_NOTES:
+        print(f"ℹ️  {note}")
 
     print(f"\n**Prototype subtotal**: {total_issues} issues across {len(results)} skills.\n")
 

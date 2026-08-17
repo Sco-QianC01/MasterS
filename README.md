@@ -7,6 +7,7 @@
 > *「下一步，不只蒸馏一个人，蒸馏一整个行业。」*
 
 [![Website](https://img.shields.io/badge/website-master--skill.org-ff2d7a?style=flat-square)](https://master-skill.org/)
+[![CI](https://github.com/swaylq/master-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/swaylq/master-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://claude.ai/code)
 [![skills.sh](https://img.shields.io/badge/skills.sh-Compatible-green)](https://skills.sh)
@@ -47,7 +48,9 @@
 
 ---
 
-> 📊 &nbsp;**已蒸馏 43 个行业** — 横切技术 / 商业 / 医疗 / 法律 / 金融 / 教育 / 内容运营 / 软技能 / 传统文化等 12 个大类。每个行业都经过六路调研 + 16 道质检 + validation gate 验收。[完整列表 ↓](#-已蒸馏的行业)
+> 📊 &nbsp;**已蒸馏 72 个行业** — 横切技术 / AI / 商业 / 内容 / 教育 / 医疗 / 法律金融 / 软技能 / 管理 / 手艺品鉴 / 传统文化 / 平台 12 个大类。每个行业都经过六路调研 + 16 道质检 + validation gate 验收。[完整列表 ↓](#-已蒸馏的行业)
+>
+> 🆕 &nbsp;**2026.07.04 扩容到 72 行业** — 深度蒸馏流水线连发 29 个新行业：临床诊断思维 / 管理咨询 / 投行并购 / 半导体制造工艺 / 加密链上交易 / 医疗美容 / 音乐制作 / 摄影 / 产品 UX 设计 / 网文写作 / 调香师 / 侍酒师 / 德州扑克 / AI 短剧 / 小红书 & 推特 & 知乎 AI 自媒体博主 等。
 >
 > 🔥 &nbsp;**2026.05.27 SkillOpt 整合** — 从 [Microsoft SkillOpt](https://github.com/microsoft/SkillOpt) 借鉴 5 个机制：**SLOW_UPDATE 保护区**（核心 OS 不被快更冲散）、**validation gate**（accept/reject 门控）、**patch editor**（结构化编辑 + 保护区感知）、**meta skill memory**（跨蒸馏学习）、**DL 类比框架**。[详情 ↓](#-skillopt-整合--让蒸馏管线自我进化)
 >
@@ -300,9 +303,9 @@ python3 tools/update_skill.py finalize --skill-dir <skill>
 
 ## ⭐ 已蒸馏的行业
 
-每个都是端到端跑过的样本，包含完整调研数据 + 生成的 SKILL.md + 一套可跑的 bash 工具。调研过程**完全透明** — 每个样本都附完整的六路调研笔记 + 蒸馏文档，可以追溯每条心智模型、每条决策规则是从哪几个来源出来的。
+每个都是端到端跑过的样本，包含生成的 SKILL.md + 一套可跑的 bash 工具。调研过程**透明可追溯** — 70/72 个样本附完整的六路调研笔记 + 蒸馏文档，可以追溯每条心智模型、每条决策规则是从哪几个来源出来的（2 个早期样本的调研档未入库，已在 meta.json 里诚实标注）。
 
-### 🖥️ 技术 (6)
+### 🖥️ 技术 (11)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
@@ -312,6 +315,11 @@ python3 tools/update_skill.py finalize --skill-dir <skill>
 | **数据工程** | 全球 | [data-engineering-master/](prototypes/data-engineering-master/) |
 | **红队渗透 / 攻防安全** | 全球 | [cybersecurity-red-team-master/](prototypes/cybersecurity-red-team-master/) |
 | **游戏设计** | 全球 | [game-design-master/](prototypes/game-design-master/) |
+| **语音转文字 (ASR)** | 中文 | [speech-to-text-master/](prototypes/speech-to-text-master/) |
+| **UBNT/UniFi 企业 Wi-Fi 工程** | 全球 | [ubnt-wifi-master/](prototypes/ubnt-wifi-master/) |
+| **Web 线上展览开发（虚拟展厅）** | 中文 | [web-online-exhibition-master/](prototypes/web-online-exhibition-master/) |
+| **Figma 转 Photoshop (PSD)** | 中文 | [figma-to-psd-master/](prototypes/figma-to-psd-master/) |
+| **半导体芯片制造工艺** | 全球 | [semiconductor-process-master/](prototypes/semiconductor-process-master/) |
 
 ### 🤖 AI / 产品 (3)
 
@@ -321,52 +329,67 @@ python3 tools/update_skill.py finalize --skill-dir <skill>
 | **AI 自适应学习** | 全球 | [ai-adaptive-learning-master/](prototypes/ai-adaptive-learning-master/) |
 | **用 AI agent 赚钱** | 全球 | [monetize-agents-master/](prototypes/monetize-agents-master/) |
 
-### 🛒 商业 / 电商 / 投流 (6)
+### 🛒 商业 / 电商 / 投流 (7)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **跨境电商运营** | 中文 | [cross-border-ecommerce-master/](prototypes/cross-border-ecommerce-master/) |
+| **B2B 大客户销售** | 全球 | [enterprise-b2b-sales-master/](prototypes/enterprise-b2b-sales-master/) |
 | **抖音直播带货** | 中文 | [douyin-live-commerce-master/](prototypes/douyin-live-commerce-master/) |
 | **短视频投流** | 中文 | [short-video-ads-master/](prototypes/short-video-ads-master/) |
 | **微信私域运营** | 中文 | [private-domain-ops-master/](prototypes/private-domain-ops-master/) |
 | **独立开发者与微型 SaaS** | 全球 | [independent-developer-micro-saas-master/](prototypes/independent-developer-micro-saas-master/) |
 | **产品营销 (PMM)** | 全球 | [product-marketing-master/](prototypes/product-marketing-master/) |
 
-### ✍️ 内容 / 运营 / 创作 (5)
+### ✍️ 内容 / 运营 / 创作 (11)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **小红书运营** | 中文 | [xiaohongshu-ops-master/](prototypes/xiaohongshu-ops-master/) |
+| **小红书 AI 自媒体博主** | 中文 | [xiaohongshu-ai-creator-master/](prototypes/xiaohongshu-ai-creator-master/) |
+| **推特中文圈 AI 自媒体博主** | 中文 | [twitter-cn-ai-creator-master/](prototypes/twitter-cn-ai-creator-master/) |
+| **知乎 AI 自媒体博主** | 中文 | [zhihu-ai-creator-master/](prototypes/zhihu-ai-creator-master/) |
+| **AI 短剧（AI 微短剧）** | 中文 | [ai-short-drama-master/](prototypes/ai-short-drama-master/) |
+| **AIGC 创作工作流** | 全球 | [aigc-creative-workflow-master/](prototypes/aigc-creative-workflow-master/) |
+| **网文写作** | 中文 | [web-novel-writing-master/](prototypes/web-novel-writing-master/) |
 | **SEO 专家** | 中文 | [seo-master/](prototypes/seo-master/) |
 | **公众号写作** | 中文 | [wechat-article-writing-master/](prototypes/wechat-article-writing-master/) |
 | **影视编剧** | 中文 | [scriptwriting-master/](prototypes/scriptwriting-master/) |
 | **内容创作者经济** | 全球 | [newsletter-creator-economy-master/](prototypes/newsletter-creator-economy-master/) |
 
-### 🎓 教育 / 培训 (6)
+### 🎓 教育 / 培训 (9)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **公务员考试培训** | 中文 | [civil-service-exam-prep-master/](prototypes/civil-service-exam-prep-master/) |
+| **家庭教育指导** | 中文 | [family-education-coaching-master/](prototypes/family-education-coaching-master/) |
+| **K12 体育培训** | 中文 | [k12-sports-training-master/](prototypes/k12-sports-training-master/) |
+| **研学营地教育** | 中文 | [study-camp-education-master/](prototypes/study-camp-education-master/) |
 | **青少年编程教育** | 全球 | [youth-coding-education-master/](prototypes/youth-coding-education-master/) |
 | **教育 SaaS** | 中文 | [education-saas-master/](prototypes/education-saas-master/) |
 | **银发教育** | 中文 | [senior-education-master/](prototypes/senior-education-master/) |
 | **青少年心理健康教育** | 中文 | [youth-mental-health-edu-master/](prototypes/youth-mental-health-edu-master/) |
 | **留学咨询规划** | 中文 | [study-abroad-consulting-master/](prototypes/study-abroad-consulting-master/) |
 
-### 🏥 医疗 / 健康 (4)
+### 🏥 医疗 / 健康 (6)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
+| **临床诊断思维** | 全球 | [clinical-diagnostic-reasoning-master/](prototypes/clinical-diagnostic-reasoning-master/) |
 | **足踝外科** | 中文 | [foot-ankle-surgery-master/](prototypes/foot-ankle-surgery-master/) |
 | **口腔种植** | 中文 | [dentistry-implant-master/](prototypes/dentistry-implant-master/) |
 | **中医诊疗** | 中文 | [traditional-chinese-medicine-master/](prototypes/traditional-chinese-medicine-master/) |
+| **医疗美容** | 中文 | [medical-aesthetics-master/](prototypes/medical-aesthetics-master/) |
 | **健身私教** | 全球 | [personal-trainer-master/](prototypes/personal-trainer-master/) |
 
-### ⚖️ 法律 / 金融 / 合规 (5)
+### ⚖️ 法律 / 金融 / 合规 (8)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **法律执业**（中国法） | 中文 | [china-law-master/](prototypes/china-law-master/) |
+| **个人投资理财** | 全球 | [personal-investing-master/](prototypes/personal-investing-master/) |
+| **投行并购 (M&A)** | 全球 | [investment-banking-mna-master/](prototypes/investment-banking-mna-master/) |
+| **加密链上交易** | 全球 | [crypto-onchain-trading-master/](prototypes/crypto-onchain-trading-master/) |
 | **保险经纪人 / 代理人** | 中文 | [insurance-broker-cn-master/](prototypes/insurance-broker-cn-master/) |
 | **风险投资人** | 全球 | [vc-investor-master/](prototypes/vc-investor-master/) |
 | **国内房产投资** | 中文 | [real-estate-investing-cn-master/](prototypes/real-estate-investing-cn-master/) |
@@ -380,24 +403,38 @@ python3 tools/update_skill.py finalize --skill-dir <skill>
 | **求职 / 面试辅导** | 中文 | [job-hunting-coach-master/](prototypes/job-hunting-coach-master/) |
 | **心理咨询 / 心理治疗** | 中文 | [psychotherapy-counseling-master/](prototypes/psychotherapy-counseling-master/) |
 
-### 🏛️ 领导力 / 管理 / 设计 (3)
+### 🏛️ 领导力 / 管理 / 设计 (6)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **CEO 工艺** | 全球 | [ceo-master/](prototypes/ceo-master/) |
+| **管理咨询** | 全球 | [management-consulting-master/](prototypes/management-consulting-master/) |
+| **亚马逊管理之道** | 中文 | [amazon-operating-model-master/](prototypes/amazon-operating-model-master/) |
+| **广告外包公司绩效管理** | 中文 | [ad-agency-performance-master/](prototypes/ad-agency-performance-master/) |
+| **产品设计 / UX 设计** | 全球 | [product-ux-design-master/](prototypes/product-ux-design-master/) |
 | **现代建筑设计** | 全球 | [architecture-design-master/](prototypes/architecture-design-master/) |
-| **GitHub 解封** | 全球 | [github-unban-master/](prototypes/github-unban-master/) |
 
-### 🔮 传统文化 / 平台 (2)
+### 🎨 手艺 / 品鉴 / 生活方式 (5)
+
+| 行业 | 语言 | 路径 |
+|------|------|------|
+| **调香师与香水** | 全球 | [perfumery-master/](prototypes/perfumery-master/) |
+| **侍酒师与葡萄酒** | 全球 | [sommelier-wine-master/](prototypes/sommelier-wine-master/) |
+| **音乐制作 / 混音** | 全球 | [music-production-master/](prototypes/music-production-master/) |
+| **摄影** | 全球 | [photography-master/](prototypes/photography-master/) |
+| **德州扑克策略** | 全球 | [poker-strategy-master/](prototypes/poker-strategy-master/) |
+
+### 🔮 传统文化 / 平台 (3)
 
 | 行业 | 语言 | 路径 |
 |------|------|------|
 | **八字命理 / 玄学算命** | 中文 | [bazi-metaphysics-master/](prototypes/bazi-metaphysics-master/) |
 | **iOS 应用上架** | 全球 | [ios-app-launch-master/](prototypes/ios-app-launch-master/) |
+| **GitHub 解封** | 全球 | [github-unban-master/](prototypes/github-unban-master/) |
 
 ---
 
-43 个行业横切 12 个大类 — 技术 / AI / 商业 / 内容 / 教育 / 医疗 / 法律 / 金融 / 软技能 / 领导力 / 传统文化 / 平台 specific。大师.skill 框架对各类行业都跑得通。
+72 个行业横切 12 个大类 — 技术 / AI / 商业 / 内容 / 教育 / 医疗 / 法律金融 / 软技能 / 管理 / 手艺品鉴 / 传统文化 / 平台 specific。大师.skill 框架对各类行业都跑得通。
 
 想蒸馏不在列表里的行业？装大师.skill，说「造大师 XXX」就行。
 
@@ -460,7 +497,7 @@ python3 tools/meta_skill.py guidance
 
 三者同源，逐层放大。
 
-而 **[私教.skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** 把方向翻了过来：大师.skill 让 AI 替你成为这一行的大师（**授人以鱼**），私教.skill 把**你自己**练成这个领域的人（**授人以渔**）。
+> 🎣 **姊妹项目 [私教.skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** — 把方向反过来：大师.skill 让你的 AI 成为行业大师（授人以鱼），私教.skill 蒸出一个记得你进度、陪你练的私教，把**你自己**训练成领域高手（授人以渔）。
 
 ---
 
@@ -508,7 +545,7 @@ master-skill/
 │   └── cli-spec.md                   #   bash 工具的设计文档
 ├── meta_skill_memory.json            # SkillOpt: 跨蒸馏学习记忆
 └── prototypes/
-    └── 13 个完整行业样本            #   见上面「已蒸馏的行业」列表
+    └── 72 个完整行业样本            #   见上面「已蒸馏的行业」列表
 ```
 
 ---
@@ -545,6 +582,7 @@ master-skill/
 | v1.5 | **第 10 个行业 — 八字命理 / 玄学算命** — 第一个半敏感 + 学派分歧大行业；同盘多派给不同结论保留分歧不平均；source_verifier 加 4 个古籍 archive 主源（ctext / guoxuedashi / wikisource / archive.org，命理 + 中医 + 历史 canon 永久受益） | ✅ |
 | v1.6 | **第 11+12 个行业 — 用 AI agent 赚钱 + iOS 应用上架** — 新兴商业（量大水分高，5 派互相挑衅）+ 平台 specific（政策 12 月强制 deadline + 双合规体系）。验证 `skip_sub_skills` flag（iOS 上架按用户指示跳人物蒸馏，节省 1 cron 周期）；iOS 上架 6 派对照（Apple 官方 / Indie / 大厂 release eng / ASO / 反 Apple / 国内合规）写完整 | ✅ |
 | v1.7 | **SkillOpt 整合 + 第 13 个行业 — 公务员考试培训** — 从 Microsoft SkillOpt 借鉴 5 个机制（SLOW_UPDATE 保护区 / validation gate / patch editor / meta skill memory / DL 类比）。用公考培训端到端验证：171 来源 / gate ACCEPT 0.90 / 3 个 SLOW_UPDATE 区域成功注入 | ✅ |
+| v1.8 | **深度蒸馏扩容 43 → 72 行业** — 流水线连发 29 个新行业（手艺品鉴 / 临床诊断思维 / 管理咨询 / 投行并购 / 半导体工艺 / 链上交易 / 医美 / AI 自媒体矩阵 等）+ 72 样本自检全绿 + CI | ✅ |
 | v2.x | PyPI 打包 / GitHub Action 自动更新 / 多语言文档 / 工具 marketplace | 🔲 |
 
 详见 [ROADMAP.md](ROADMAP.md)。
@@ -562,6 +600,7 @@ MIT — 随便用，随便改，随便造。
 **🧬 同事.skill** 蒸馏一个**具体的人**做什么。<br>
 **🌟 女娲.skill** 蒸馏**任何人**怎么想。<br>
 **🎓 大师.skill** 蒸馏**一整个行业**的认知 + 工作流 + 工具。<br>
+**📖 [私教.skill](https://github.com/swaylq/sijiao-skill)** 反过来——把**你**训练成领域高手。<br>
 
 <br>
 

@@ -2,8 +2,12 @@
 
 # 🎓 master-skill &nbsp;[![Tweet](https://img.shields.io/badge/share%20on-Twitter%2FX-000000?style=flat-square&logo=x)](https://twitter.com/intent/tweet?text=master-skill%20%E2%80%94%20give%20it%20an%20industry%2C%2030-60%20min%20later%20it%20auto-distills%20a%20loadable%20Master%20OS%20skill.%20Plug%20into%20any%20AI%20agent%2C%20instantly%20become%20%22the%20senior%20practitioner%20of%20that%20field.%22&url=https%3A%2F%2Fgithub.com%2Fswaylq%2Fmaster-skill&hashtags=ClaudeCode%2CAIAgent%2CMasterSkill%2COpenSource)
 
+### 🌐 [master-skill.org](https://master-skill.org/) — chat with the distilled masters online
+
 > *"Next step — don't just distill a person. Distill an entire industry."*
 
+[![Website](https://img.shields.io/badge/website-master--skill.org-ff2d7a?style=flat-square)](https://master-skill.org/)
+[![CI](https://github.com/swaylq/master-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/swaylq/master-skill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-Skill-blueviolet)](https://claude.ai/code)
 [![skills.sh](https://img.shields.io/badge/skills.sh-Compatible-green)](https://skills.sh)
@@ -44,17 +48,13 @@ Drop into any AI agent — from that moment on,<br>
 
 ---
 
-> 🆕 &nbsp;**2026.05.10 — 12th industry: iOS App Store launch** — the first **platform-specific + dual-compliance + 12-month-mandatory-deadline** industry. Apple App Review is a black box (industry estimate 20-40% rejection rate), so this skill distills **how to reduce rejection rate + recover fast** instead of "guaranteed approval." Overseas Apple-only review vs mainland China's 4-step (ICP + Algorithm + Game-license + 8-10 domestic marketplaces) is non-fungible. **Skips person sub-skills** per user direction (validates the skip_sub_skills flag).
+> 📊 &nbsp;**72 industries distilled** — cross-cutting technical / AI / commercial / content / education / medical / legal-finance / soft skills / management / craft & connoisseurship / traditional culture / platform-specific, 12 top-level categories. Every one passed six-track research + 16 quality checks + the validation gate. [Full list ↓](#-distilled-industries)
 >
-> 🆕 &nbsp;**2026.05.09 — 11th industry: Monetizing AI agents** — distilled the emerging commercial niche (high volume but terrible signal-to-noise; 90% is hype). 5 schools openly contradict each other (B2B SaaS / Indie hacker / Consulting / VC observer / China) — distillation preserves disagreement, doesn't average. 3 cross-school person sub-skills: **Bret Taylor** (Sierra B2B) + **Pieter Levels** (Indie extreme) + **Hamel Husain** (Consulting + evals).
+> 🆕 &nbsp;**2026.07.04 — expanded to 72 industries** — the deep-distill pipeline shipped 29 new industries: clinical diagnostic reasoning / management consulting / investment-banking M&A / semiconductor process / crypto on-chain trading / medical aesthetics / music production / photography / product & UX design / web-novel writing / perfumery / sommelier / poker strategy / Xiaohongshu & Twitter & Zhihu AI-creator, and more.
 >
-> 🆕 &nbsp;**2026.05.08 — 10th industry: Bazi metaphysics / Chinese fortune-telling** — the first **semi-sensitive + school-divergent** industry distilled. Five schools (子平派 Ziping / 盲派 Mangpai / 五术派 Wushu / 新派 Newschool / 学院派 Academic) give different readings of the same chart, and the skill **preserves disagreement instead of averaging**. The 2026-01-01 amendment to China's Public Security Administration Punishment Law (Article 27, business-side compliance) is baked into the decision rules. 3 cross-school person sub-skills shipped: **段建业** (mainland Mangpai) + **倪海厦** (Hong Kong/Taiwan five-arts) + **梁湘润** (子平 academic-track).
+> 🔥 &nbsp;**2026.05.27 — SkillOpt integration** — borrowed 5 mechanisms from [Microsoft SkillOpt](https://github.com/microsoft/SkillOpt): **SLOW_UPDATE protected zones** (the core OS survives fast refreshes), **validation gate** (accept/reject gating), **patch editor** (structured edits, zone-aware), **meta skill memory** (cross-distillation learning), and the **DL analogy frame**.
 >
-> 🔥 &nbsp;**2026.05.05 — v1.4 quality upgrade** — before, when an agent claimed "86% of my sources are first-hand," it was self-grading on the honor system. Now every URL is auto-classified, every skill must clear 16 quality checks, and known content farms (Zhihu / WeChat blogs / G2 / Capterra etc.) are hard-blocked at intake. **You can't distill garbage anymore.** Plus a 9th end-to-end industry — **insurance brokers / agents (China)**.
->
-> 📢 &nbsp;**2026.05.02 release** — generated skills don't just talk; they ship with a bash command suite. [Release notes →](https://github.com/swaylq/master-skill/releases/tag/v1.1)
->
-> 🔥 &nbsp;**2026.05.02 public** — first complete industry (LLM agent infrastructure) verified end-to-end.
+> 📢 &nbsp;**2026.05.02 public** — first complete industry (LLM agent infrastructure) verified end-to-end. [Release notes →](https://github.com/swaylq/master-skill/releases/tag/v1.1)
 
 ---
 
@@ -307,45 +307,138 @@ python3 tools/update_skill.py finalize --skill-dir <skill>
 
 ## ⭐ Distilled industries
 
-Every one is end-to-end runnable, with full research data + generated SKILL.md + a working bash tool suite:
+Every one is an end-to-end sample: generated SKILL.md + a working bash tool suite. The research process is **transparent and traceable** — 70/72 prototypes include the complete six-track research notes + synthesis document, so every mental model and decision rule can be traced back to its sources (2 early samples whose research archive wasn't preserved are honestly flagged in their meta.json).
 
-| Industry | Category | Language | Path |
-|------|------|------|------|
-| 🔥 **LLM agent infrastructure** | Technical | English | [llm-agent-infra-master/](prototypes/llm-agent-infra-master/) |
-| ✅ **Cross-border e-commerce** | Commercial | Chinese | [cross-border-ecommerce-master/](prototypes/cross-border-ecommerce-master/) |
-| ✅ **Xiaohongshu operations** | Content ops | Chinese | [xiaohongshu-ops-master/](prototypes/xiaohongshu-ops-master/) |
-| ✅ **Short-video paid ads** | Commercial + algo | Chinese | [short-video-ads-master/](prototypes/short-video-ads-master/) |
-| ✅ **SEO expert** | Semi-technical | Chinese | [seo-master/](prototypes/seo-master/) |
-| ✅ **Love coach** | Soft skills | Chinese | [love-coach-master/](prototypes/love-coach-master/) |
-| ✅ **Foot-and-ankle surgery** | Medical (regulated) | Chinese | [foot-ankle-surgery-master/](prototypes/foot-ankle-surgery-master/) |
-| ✅ **Chinese law practice** | Legal (regulated) | Chinese | [china-law-master/](prototypes/china-law-master/) |
-| ✅ **Insurance broker / agent** | Finance (regulated) | Chinese | [insurance-broker-cn-master/](prototypes/insurance-broker-cn-master/) |
-| ✅ **Bazi metaphysics / fortune-telling** | Traditional culture (semi-sensitive) | Chinese | [bazi-metaphysics-master/](prototypes/bazi-metaphysics-master/) |
-| ✅ **Monetizing AI agents** | Emerging commercial | Global | [monetize-agents-master/](prototypes/monetize-agents-master/) |
-| 🆕 **iOS App Store launch** | Platform-specific (high policy churn) | Global + Chinese | [ios-app-launch-master/](prototypes/ios-app-launch-master/) |
+### 🖥️ Technical (11)
 
-12 industries cross-cutting technical / commercial / content ops / soft skills / medical / legal / finance / traditional culture / emerging commercial / platform-specific — master-skill handles even cases where five schools openly disagree (emerging commercial) or where 12-month policy deadlines are enforced (platform-specific).
+| Industry | Language | Path |
+|------|------|------|
+| **LLM agent infrastructure** | English | [llm-agent-infra-master/](prototypes/llm-agent-infra-master/) |
+| **Software architecture** | Global | [software-architecture-master/](prototypes/software-architecture-master/) |
+| **DevOps & SRE** | Global | [devops-sre-master/](prototypes/devops-sre-master/) |
+| **Data engineering** | Global | [data-engineering-master/](prototypes/data-engineering-master/) |
+| **Red team / offensive security** | Global | [cybersecurity-red-team-master/](prototypes/cybersecurity-red-team-master/) |
+| **Game design** | Global | [game-design-master/](prototypes/game-design-master/) |
+| **Speech-to-text (ASR)** | Chinese | [speech-to-text-master/](prototypes/speech-to-text-master/) |
+| **UBNT/UniFi enterprise Wi-Fi engineering** | Global | [ubnt-wifi-master/](prototypes/ubnt-wifi-master/) |
+| **Web online exhibitions (virtual galleries)** | Chinese | [web-online-exhibition-master/](prototypes/web-online-exhibition-master/) |
+| **Figma to Photoshop (PSD)** | Chinese | [figma-to-psd-master/](prototypes/figma-to-psd-master/) |
+| **Semiconductor manufacturing process** | Global | [semiconductor-process-master/](prototypes/semiconductor-process-master/) |
 
-**What's inside the latest "iOS App Store launch" deliverable**:
+### 🤖 AI / Product (3)
 
-- 169 sources, 70.4% first-hand, 0 blacklisted
-- 6 core mental models (**Apple App Review is a black box** / **Dual compliance is non-fungible** (overseas vs mainland China) / **Policy decay is fast** / **ASO data-driven vs Indie audience-first** / **30% Apple Tax is a fact** / **Rejection is daily**)
-- 10 decision rules, including a dedicated path for the China 4-step compliance: ICP filing + Algorithm filing + Game license number + 8-10 domestic Android marketplaces' separate review
-- 12 real-industry dialogue samples (4 registers: peer / user-education / anti-Apple / counter-example × 6 schools covered)
-- 5 ready-to-run bash decision scripts (rejection handling / ASO choice / region strategy / monetization model / China compliance)
-- A complete **6-school comparison matrix** (Apple official / Overseas Indie / Big-co release engineering / ASO optimization / Anti-Apple antitrust / China compliance)
+| Industry | Language | Path |
+|------|------|------|
+| **AI product manager** | Global | [ai-product-manager-master/](prototypes/ai-product-manager-master/) |
+| **AI adaptive learning** | Global | [ai-adaptive-learning-master/](prototypes/ai-adaptive-learning-master/) |
+| **Monetizing AI agents** | Global | [monetize-agents-master/](prototypes/monetize-agents-master/) |
 
-**User directive**: this iOS deliverable **skips person sub-skill distillation** (saves 1 cron cycle), while keeping the 16-figure landscape research as part of the industry's cognitive map. This validates master-skill's `skip_sub_skills` flag — the deliverable is still complete (research + synthesis + SKILL.md + cli + full QC suite).
+### 🛒 Commercial / E-commerce / Paid ads (7)
 
-All four QC checks PASS:
-- mechanical rubric: 13 perfect + 1 partial + 0 fail (16 items)
-- claim verifier: 16 supported / 0 weak / 0 unsupported
-- source manifest: 0 violation
-- cross-prototype regression: 0 issue across all 12 skills
+| Industry | Language | Path |
+|------|------|------|
+| **Cross-border e-commerce** | Chinese | [cross-border-ecommerce-master/](prototypes/cross-border-ecommerce-master/) |
+| **Enterprise B2B sales** | Global | [enterprise-b2b-sales-master/](prototypes/enterprise-b2b-sales-master/) |
+| **Douyin live commerce** | Chinese | [douyin-live-commerce-master/](prototypes/douyin-live-commerce-master/) |
+| **Short-video paid ads** | Chinese | [short-video-ads-master/](prototypes/short-video-ads-master/) |
+| **WeChat private-domain ops** | Chinese | [private-domain-ops-master/](prototypes/private-domain-ops-master/) |
+| **Indie developer & micro-SaaS** | Global | [independent-developer-micro-saas-master/](prototypes/independent-developer-micro-saas-master/) |
+| **Product marketing (PMM)** | Global | [product-marketing-master/](prototypes/product-marketing-master/) |
 
-**Sensitivity note**: iOS App Store launch is a black-box review industry (industry estimate 20-40% rejection rate). Any "guarantee approval / proxy submission" service is a scam. What this skill distills is **the cognitive framework for reducing rejection rate + recovering quickly + multi-region compliance** — not "guaranteed approval" promises. Six honest-boundary clauses include "no fraudulent shortcuts" (no fake reviews / no using TestFlight public links as a release / no Chinese license-number gray market / no protesting the 30% tax instead of accepting it).
+### ✍️ Content / Ops / Creation (11)
 
-The research process is **fully transparent** — every prototype includes complete six-track research notes + the synthesis document, every mental model and decision rule traceable to its sources.
+| Industry | Language | Path |
+|------|------|------|
+| **Xiaohongshu operations** | Chinese | [xiaohongshu-ops-master/](prototypes/xiaohongshu-ops-master/) |
+| **Xiaohongshu AI-creator** | Chinese | [xiaohongshu-ai-creator-master/](prototypes/xiaohongshu-ai-creator-master/) |
+| **Chinese-Twitter AI-creator** | Chinese | [twitter-cn-ai-creator-master/](prototypes/twitter-cn-ai-creator-master/) |
+| **Zhihu AI-creator** | Chinese | [zhihu-ai-creator-master/](prototypes/zhihu-ai-creator-master/) |
+| **AI short drama** | Chinese | [ai-short-drama-master/](prototypes/ai-short-drama-master/) |
+| **AIGC creative workflow** | Global | [aigc-creative-workflow-master/](prototypes/aigc-creative-workflow-master/) |
+| **Web-novel writing** | Chinese | [web-novel-writing-master/](prototypes/web-novel-writing-master/) |
+| **SEO expert** | Chinese | [seo-master/](prototypes/seo-master/) |
+| **WeChat long-form writing** | Chinese | [wechat-article-writing-master/](prototypes/wechat-article-writing-master/) |
+| **Screenwriting** | Chinese | [scriptwriting-master/](prototypes/scriptwriting-master/) |
+| **Newsletter / creator economy** | Global | [newsletter-creator-economy-master/](prototypes/newsletter-creator-economy-master/) |
+
+### 🎓 Education / Training (9)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Civil-service exam prep** | Chinese | [civil-service-exam-prep-master/](prototypes/civil-service-exam-prep-master/) |
+| **Family education coaching** | Chinese | [family-education-coaching-master/](prototypes/family-education-coaching-master/) |
+| **K12 sports training** | Chinese | [k12-sports-training-master/](prototypes/k12-sports-training-master/) |
+| **Study-camp education** | Chinese | [study-camp-education-master/](prototypes/study-camp-education-master/) |
+| **Youth coding education** | Global | [youth-coding-education-master/](prototypes/youth-coding-education-master/) |
+| **Education SaaS** | Chinese | [education-saas-master/](prototypes/education-saas-master/) |
+| **Senior education** | Chinese | [senior-education-master/](prototypes/senior-education-master/) |
+| **Youth mental-health education** | Chinese | [youth-mental-health-edu-master/](prototypes/youth-mental-health-edu-master/) |
+| **Study-abroad consulting** | Chinese | [study-abroad-consulting-master/](prototypes/study-abroad-consulting-master/) |
+
+### 🏥 Medical / Health (6)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Clinical diagnostic reasoning** | Global | [clinical-diagnostic-reasoning-master/](prototypes/clinical-diagnostic-reasoning-master/) |
+| **Foot-and-ankle surgery** | Chinese | [foot-ankle-surgery-master/](prototypes/foot-ankle-surgery-master/) |
+| **Dental implantology** | Chinese | [dentistry-implant-master/](prototypes/dentistry-implant-master/) |
+| **Traditional Chinese medicine** | Chinese | [traditional-chinese-medicine-master/](prototypes/traditional-chinese-medicine-master/) |
+| **Medical aesthetics** | Chinese | [medical-aesthetics-master/](prototypes/medical-aesthetics-master/) |
+| **Personal trainer** | Global | [personal-trainer-master/](prototypes/personal-trainer-master/) |
+
+### ⚖️ Legal / Finance / Compliance (8)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Chinese law practice** | Chinese | [china-law-master/](prototypes/china-law-master/) |
+| **Personal investing** | Global | [personal-investing-master/](prototypes/personal-investing-master/) |
+| **Investment banking M&A** | Global | [investment-banking-mna-master/](prototypes/investment-banking-mna-master/) |
+| **Crypto on-chain trading** | Global | [crypto-onchain-trading-master/](prototypes/crypto-onchain-trading-master/) |
+| **Insurance broker / agent (China)** | Chinese | [insurance-broker-cn-master/](prototypes/insurance-broker-cn-master/) |
+| **VC investor** | Global | [vc-investor-master/](prototypes/vc-investor-master/) |
+| **China real-estate investing** | Chinese | [real-estate-investing-cn-master/](prototypes/real-estate-investing-cn-master/) |
+| **China ICP filing & compliance** | Chinese | [china-icp-filing-master/](prototypes/china-icp-filing-master/) |
+
+### 💡 Soft skills / Interpersonal / Psychology (3)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Love coach** | Chinese | [love-coach-master/](prototypes/love-coach-master/) |
+| **Job-hunting / interview coaching** | Chinese | [job-hunting-coach-master/](prototypes/job-hunting-coach-master/) |
+| **Psychotherapy / counseling** | Chinese | [psychotherapy-counseling-master/](prototypes/psychotherapy-counseling-master/) |
+
+### 🏛️ Leadership / Management / Design (6)
+
+| Industry | Language | Path |
+|------|------|------|
+| **The CEO craft** | Global | [ceo-master/](prototypes/ceo-master/) |
+| **Management consulting** | Global | [management-consulting-master/](prototypes/management-consulting-master/) |
+| **The Amazon operating model** | Chinese | [amazon-operating-model-master/](prototypes/amazon-operating-model-master/) |
+| **Ad-agency performance management** | Chinese | [ad-agency-performance-master/](prototypes/ad-agency-performance-master/) |
+| **Product & UX design** | Global | [product-ux-design-master/](prototypes/product-ux-design-master/) |
+| **Modern architecture design** | Global | [architecture-design-master/](prototypes/architecture-design-master/) |
+
+### 🎨 Craft / Connoisseurship / Lifestyle (5)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Perfumery** | Global | [perfumery-master/](prototypes/perfumery-master/) |
+| **Sommelier & wine** | Global | [sommelier-wine-master/](prototypes/sommelier-wine-master/) |
+| **Music production / mixing** | Global | [music-production-master/](prototypes/music-production-master/) |
+| **Photography** | Global | [photography-master/](prototypes/photography-master/) |
+| **Poker strategy** | Global | [poker-strategy-master/](prototypes/poker-strategy-master/) |
+
+### 🔮 Traditional culture / Platform (3)
+
+| Industry | Language | Path |
+|------|------|------|
+| **Bazi metaphysics / fortune-telling** | Chinese | [bazi-metaphysics-master/](prototypes/bazi-metaphysics-master/) |
+| **iOS App Store launch** | Global | [ios-app-launch-master/](prototypes/ios-app-launch-master/) |
+| **GitHub account unban** | Global | [github-unban-master/](prototypes/github-unban-master/) |
+
+---
+
+72 industries across 12 top-level categories — including cases where five schools openly disagree (monetizing agents, bazi), heavily regulated fields (surgery, law, insurance), and platform-specific policy churn (iOS launch). The master-skill framework holds up across all of them.
 
 Want an industry not on the list? Install master-skill, say "build a master skill for XXX".
 
@@ -380,6 +473,8 @@ master-skill stands on two shoulders:
 
 Three of one lineage, scaling outward.
 
+> 🎣 **Sister project [sijiao-skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** — flips the direction: master-skill turns your AI into the industry expert (gives you the fish); sijiao-skill distills a stateful private tutor that remembers your progress and trains **you** into the expert (teaches you to fish).
+
 ---
 
 ## 📂 Project structure
@@ -401,6 +496,8 @@ master-skill/
 │   ├── update_skill.py               #   incremental refresh
 │   ├── install.py                    #   four-host installer
 │   ├── self_test.py                  #   regression tests across all prototypes + tools
+│   ├── patch_editor.py               #   SkillOpt: 4 structured edit ops + SLOW_UPDATE zone guard
+│   ├── meta_skill.py                 #   SkillOpt: cross-distillation learning memory
 │   ├── research/                     # quality guardrails (new in v1.4)
 │   │   ├── source_verifier.py        #   per-URL auto-classify + black/whitelist
 │   │   ├── source_manifest.py        #   source ledger + consistency enforcement
@@ -408,6 +505,7 @@ master-skill/
 │   │   ├── cold_detector.py          #   obscure-industry auto-fallback (deep-research mode)
 │   │   ├── refresh_sources.py        #   periodic source-liveness check
 │   │   ├── quality_check.py          #   16 automatic checks
+│   │   ├── validation_gate.py        #   SkillOpt: accept/reject gate (weighted scoring)
 │   │   └── merge_research.py         #   research review aggregator
 │   ├── collectors/                   # auto-pull industry seed material
 │   │   ├── github / arxiv / RSS / podcast (4 collectors)
@@ -422,7 +520,7 @@ master-skill/
 │   ├── extraction-framework.md       #   distillation methodology (triple-gate / decay table / schools)
 │   └── cli-spec.md                   #   bash tool design spec
 └── prototypes/
-    └── 9 complete industry samples   #   see "Distilled industries" above
+    └── 72 complete industry samples  #   see "Distilled industries" above
 ```
 
 ---
@@ -441,7 +539,7 @@ master-skill/
 
 - In Chinese-language environments, Zhihu / WeChat blogs / Baidu Baike / CSDN are auto-excluded (unless author-original)
 - The earlier the info cutoff, the faster the tools/workflows modules decay — use `update master X` to incrementally refresh
-- This is v1.1 and still iterating fast. Found a bug? Open an issue.
+- This is v1.8 and still iterating fast. Found a bug? Open an issue.
 
 ---
 
@@ -458,6 +556,8 @@ master-skill/
 | v1.4 | **Quality guardrails + 9th industry** — auto-run 16 quality checks + URL verification + blacklist hard-block + cold-niche fallback (auto-pull from associations / regulators / job descs / course syllabi) + new **insurance broker / agent** sample | ✅ |
 | v1.5 | **10th industry — Bazi metaphysics / fortune-telling** — first semi-sensitive + school-divergent industry; preserves disagreement instead of averaging when 5 schools give different readings; source_verifier extended with 4 zh-CN classical archives (ctext / guoxuedashi / wikisource / archive.org), benefiting all metaphysics + TCM + history canon work going forward | ✅ |
 | v1.6 | **11th + 12th industries — Monetizing AI agents + iOS App Store launch** — emerging commercial (high volume but terrible signal-to-noise, 5 schools openly contradicting) + platform-specific (12-month mandatory deadlines + dual compliance overseas vs mainland China). Validates `skip_sub_skills` flag (iOS launch skips person distillation per user, saves 1 cron cycle); iOS launch ships a 6-school comparison matrix (Apple / Indie / Big-co release engineering / ASO / Anti-Apple / China compliance) | ✅ |
+| v1.7 | **SkillOpt integration + 13th industry (civil-service exam prep)** — 5 mechanisms from Microsoft SkillOpt: SLOW_UPDATE protected zones / validation gate / patch editor / meta skill memory / DL analogy. Validated end-to-end: 171 sources / gate ACCEPT 0.90 / 3 protected zones injected | ✅ |
+| v1.8 | **Deep-distill expansion 43 → 72 industries** — 29 new industries (craft & connoisseurship / clinical reasoning / consulting / IB M&A / semiconductor / on-chain trading / medical aesthetics / AI-creator matrix and more) + 72-prototype self-test all green + CI | ✅ |
 | v2.x | PyPI packaging / GitHub Action auto-update / multi-language docs / tool marketplace | 🔲 |
 
 See [ROADMAP.md](ROADMAP.md).
@@ -475,6 +575,7 @@ MIT — use it, fork it, ship with it.
 **🧬 colleague-skill** distills what **one specific person** does.<br>
 **🌟 nuwa-skill** distills how **anyone** thinks.<br>
 **🎓 master-skill** distills **an entire industry's** cognition + workflows + tools.<br>
+**📖 [sijiao-skill](https://github.com/swaylq/sijiao-skill)** flips it — trains **you** into the expert.<br>
 
 <br>
 

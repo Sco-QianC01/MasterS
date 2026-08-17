@@ -159,6 +159,31 @@ iter 24-26 集中 14 项 Q1-Q6 改造, 把 "agent 自报一手率" 替换为机�
 
 后 3 个 (10/11/12) 都是"学派分歧 = 行业特征"的 high-divergence 行业, 验证 master-skill 框架对 high-divergence 行业的健壮性.
 
+## v1.7 — SkillOpt 整合 + 第 13 个行业 ✅ (2026-05-27)
+
+从 [Microsoft SkillOpt](https://github.com/microsoft/SkillOpt) 借鉴 5 个机制, 让蒸馏管线可以自我进化:
+
+- [x] **SLOW_UPDATE 保护区** (`skill_writer.py`) — 生成的 SKILL.md 自动标记低衰减区域 (心智模型 / 表达 DNA / 智识谱系), 增量更新时 patch editor 跳过, 核心 OS 不被快更冲散
+- [x] **Validation Gate** (`tools/research/validation_gate.py`) — Phase 4 accept/reject 门控, 加权评分区分 critical failure 一票否决 与 partial 可接受降级
+- [x] **Patch Editor** (`tools/patch_editor.py`) — 4 种结构化编辑操作, 每步检测是否落入保护区
+- [x] **Meta Skill Memory** (`tools/meta_skill.py`) — 跨蒸馏学习记忆 (`meta_skill_memory.json`)
+- [x] **DL 类比框架** — skill=权重 / patch=梯度 / edit budget=学习率 / SLOW_UPDATE=frozen layers
+- [x] 第 13 个行业端到端验证: 公务员考试培训 — 171 来源 / gate ACCEPT 0.90 / 3 个 SLOW_UPDATE 区域成功注入
+
+## v1.8 — 深度蒸馏扩容 43 → 72 行业 ✅ (2026-05-18 → 07-04)
+
+deep-distill 流水线连续运转六周+, 从 13 个样本扩到 72 个, README 分类扩到 12 大类:
+
+- [x] 新增 29 个行业 (v1.7 后): 家庭教育指导 / Figma 转 PSD / 研学营地教育 / AI 短剧 / 语音转文字 ASR / K12 体育培训 / 德州扑克策略 / Web 线上展览 / 侍酒师与葡萄酒 / 调香师与香水 / 管理咨询 / B2B 大客户销售 / 临床诊断思维 / 小红书 & 推特 & 知乎 AI 自媒体博主 / UBNT 企业 Wi-Fi / 个人投资理财 / 音乐制作混音 / 摄影 / 产品 UX 设计 / 投行并购 / 网文写作 / 加密链上交易 / 医疗美容 / 半导体制造工艺 / AIGC 创作工作流 / 广告外包公司绩效管理 / 亚马逊管理之道 等
+- [x] 新大类: 手艺 / 品鉴 / 生活方式 (调香 / 侍酒 / 音乐制作 / 摄影 / 德扑)
+- [x] `self_test.py` 全量回归: 72 prototypes + 工具冒烟 0 issues
+  - cold_detector 接受 `output/` 子目录调用 (向上解析 prototype root), error 报告回显 stage
+  - scriptwriting 调研留痕归位到标准位置 (`{proto}/references/`)
+  - ceo-master 3 个人物 sub-skill 补齐 frontmatter (name / description / triggers)
+  - 2 个早期深蒸样本 (ceo / game-design) 调研档未入库 → meta.json `research_trail: false` 诚实标注, self_test 报 informational 不计 issue
+  - SKILL.md 中标注「待生成」的 sub-skill 前向引用不再误报为断链
+- [x] GitHub Actions CI: push/PR 自动跑 self_test
+
 ## v1.x — 计划中
 
 - [ ] Phase 1 子 agent 主动用 brave-search / agent-reach

@@ -69,12 +69,30 @@ def count_entries(path: Path) -> int:
     return len(re.findall(r"^###\s+", text, re.MULTILINE))
 
 
+def resolve_skill_root(skill_dir: Path) -> Path:
+    """Accept either a prototype root or its `output/` subdir.
+
+    Prototype layout keeps the research trail at the ROOT
+    (`{proto}/references/research`) while the installable skill lives in
+    `{proto}/output/`. Callers pass either; walk up one level when handed
+    an `output/` dir whose parent holds the trail.
+    """
+    if (skill_dir / "references" / "research").exists():
+        return skill_dir
+    parent = skill_dir.parent
+    if skill_dir.name == "output" and (parent / "references" / "research").exists():
+        return parent
+    return skill_dir
+
+
 def detect(skill_dir: Path, thresholds: dict, stage: str = "full") -> dict:
+    skill_dir = resolve_skill_root(skill_dir)
     research_dir = skill_dir / "references" / "research"
     if not research_dir.exists():
         return {
             "verdict": "error",
             "reason": f"research dir not found: {research_dir}",
+            "stage": stage,
             "exit": 3,
         }
 

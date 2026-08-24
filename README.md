@@ -497,7 +497,7 @@ python3 tools/meta_skill.py guidance
 
 三者同源，逐层放大。
 
-> 🎣 **姊妹项目 [私教.skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** — 把方向反过来：大师.skill 让你的 AI 成为行业大师（授人以鱼），私教.skill 蒸出一个记得你进度、陪你练的私教，把**你自己**训练成领域高手（授人以渔）。
+> 🎣 **姊妹项目 [私教.skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)**（[官网](https://swaylq.github.io/sijiao-skill/)）— 把方向反过来：大师.skill 让你的 AI 成为行业大师（授人以鱼），私教.skill 蒸出一个记得你进度、陪你练的私教，把**你自己**训练成领域高手（授人以渔）。
 
 ---
 

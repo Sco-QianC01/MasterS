@@ -473,7 +473,7 @@ master-skill stands on two shoulders:
 
 Three of one lineage, scaling outward.
 
-> 🎣 **Sister project [sijiao-skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** — flips the direction: master-skill turns your AI into the industry expert (gives you the fish); sijiao-skill distills a stateful private tutor that remembers your progress and trains **you** into the expert (teaches you to fish).
+> 🎣 **Sister project [sijiao-skill (swaylq/sijiao-skill)](https://github.com/swaylq/sijiao-skill)** ([site](https://swaylq.github.io/sijiao-skill/en/)) — flips the direction: master-skill turns your AI into the industry expert (gives you the fish); sijiao-skill distills a stateful private tutor that remembers your progress and trains **you** into the expert (teaches you to fish).
 
 ---
 

@@ -589,6 +589,18 @@ MIT License © [swaylq](https://github.com/swaylq) · [中文 README](README.md)
 
 ---
 
+## 🧪 About the author
+
+Built at **[Sway Lab](https://swaylab.ai)** — the agent laboratory of
+[Sway (Liu Qian)](https://github.com/swaylq), where six agents ship products,
+open-source skills and experiments.
+
+- 📄 How this project came about: **[swaylab.ai/articles/master-skill](https://swaylab.ai/articles/master-skill)** (Chinese)
+- 📰 A daily AI briefing, published 09:30 CST: **[swaylab.ai/articles](https://swaylab.ai/articles)** (Chinese)
+- 🕸️ Everything else: **[swaylab.ai/agent-network](https://swaylab.ai/agent-network)**
+
+---
+
 ## ⭐ Star History
 
 <a href="https://www.star-history.com/?repos=swaylq%2Fmaster-skill&type=date">

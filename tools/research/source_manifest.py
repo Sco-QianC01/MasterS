@@ -226,6 +226,13 @@ SURROGATE_NOTE_KEYWORDS: tuple[str, ...] = (
     # Recognized education-content vendor's own first-party material (e.g.
     # Wine Folly). Consistent with the existing "vendor docs" / "supplier" type.
     "education vendor",
+    # iter43 (corporate-finance-cfo): a book publisher's own official product
+    # page (mheducation.com / wiley.com / simonandschuster / 出版社官方书页).
+    # First-hand for the book's existence, edition, publication date and ToC —
+    # the canon track of EVERY industry produces these, so this is a generic
+    # addition, not a finance-specific one. It is NOT an endorsement of the
+    # book's claims (those still need the author's own text or academic review).
+    "publisher", "出版社",
     # iter (perfumery): a standards-setting body publishing its own standard
     # (e.g. IFRA fragrance standards, ASTM, ISO TC). First-hand for the standard
     # it originates — the sibling of the existing "certification body" /

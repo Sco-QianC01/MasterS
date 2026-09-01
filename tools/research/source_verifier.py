@@ -931,6 +931,25 @@ PRIMARY_PERSONAL_DOMAINS: set[str] = {
     # Iter (investment-banking-mna): Aswath Damodaran's own blog — the valuation
     # originator speaking long-form (NYU stern page already covered by .edu suffix).
     "aswathdamodaran.blogspot.com",
+    # iter43 (corporate-finance-cfo 2026-09-02): accounting-standard setters,
+    # professional bodies that ORIGINATE the syllabus/body of knowledge, and
+    # figures' own long-form sites. Judgment test applied throughout: is this
+    # entity speaking about its own thing? Media, analyst houses and vendor
+    # marketing pages were deliberately NOT added — they stay secondary /
+    # surrogate. Generic for any future finance / accounting / CFO skill.
+    "www.ifrs.org", "ifrs.org",                          # IASB/IFRS Foundation — 准则发布机构
+    "www.fasb.org", "fasb.org", "asc.fasb.org",          # FASB — US GAAP 发布机构
+    "www.aicpa-cima.com", "aicpa-cima.com",              # AICPA & CIMA — 会计职业团体
+    "www.imanet.org", "imanet.org",                      # IMA — 管理会计知识体系 originator
+    "www.imaglobal.org", "imaglobal.org",                # IMA 新主域 (2026 迁移)
+    "www.accaglobal.com", "accaglobal.com",              # ACCA
+    "www.cimaglobal.com", "cimaglobal.com",              # CIMA
+    "www.ifac.org", "ifac.org",                          # IFAC — 国际会计师联合会
+    "www.cicpa.org.cn", "cicpa.org.cn",                  # 中国注册会计师协会
+    "www.berkshirehathaway.com", "berkshirehathaway.com",  # 巴菲特股东信原文
+    "bbrt.org", "www.bbrt.org",                          # Beyond Budgeting Institute — 方法 originator
+    "www.50xpodcast.com", "50xpodcast.com",              # William Thorndike 本人主持的播客主站
+    "www.financialprofessionals.org", "financialprofessionals.org",  # AFP — 司库与 FP&A 协会
     # Iter (product-ux-design): UX/design figures' & authors' OWN long-form sites /
     # official book sites — the figure/author speaking for themselves (parallel to
     # lexfridman.com / cambridge-mt.com). Genuine first-hand canon. Generic for any

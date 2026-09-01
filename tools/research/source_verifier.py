@@ -80,6 +80,65 @@ EXIT_CODES = {
 # Academic, standard bodies, government, journal publishers, well-known
 # canonical channels.
 PRIMARY_DOMAINS_EXACT: set[str] = {
+    "go.aiag.org",                               # AIAG standards subdomain (APQP / Control Plan)
+    "projectproduction.org", "www.projectproduction.org",  # Project Production Institute own journal
+    # iter42b (supply-chain-ops 2026-09-02): academic publishers/journals, learned
+    # societies, ASCM chapters/subdomains, method-originator orgs, conference
+    # officials and show-own podcast sites surfaced by the 6-track swarm.
+    "pubsonline.informs.org",                    # INFORMS official journal platform (M&SOM/MnSc)
+    "journals.sagepub.com",                      # SAGE journals official
+    "www.scielo.br", "scielo.br",                # SciELO open-access journal platform
+    "www.jiem.org", "jiem.org",                  # Journal of Industrial Engineering & Management
+    "ink.library.smu.edu.sg",                    # SMU institutional repository (.edu.sg)
+    "portal.research.lu.se",                     # Lund University research portal
+    "pomsmeetings.org", "www.pomsmeetings.org",  # POMS society conference official
+    "bc.ascm.org", "scor.ascm.org", "sandiego.ascm.org", "goldengate.ascm.org",  # ASCM chapters/SCOR
+    "committee.iso.org",                         # ISO committee subdomain
+    "www.demanddrivenmrp.com", "demanddrivenmrp.com",  # Ptak & Smith DDMRP author site (originator)
+    "goldrattgroup.com", "www.goldrattgroup.com",      # Goldratt Group (TOC originator org)
+    "www.ame.org", "ame.org",                    # Association for Manufacturing Excellence
+    "iassc.org", "www.iassc.org",                # IASSC — Six Sigma certification body
+    "ibf.org", "www.ibf.org",                    # Institute of Business Forecasting (association)
+    "www.ismworld.org", "ismworld.org",          # Institute for Supply Management (PMI originator)
+    "www.chinawuliu.com.cn", "chinawuliu.com.cn", "csl.chinawuliu.com.cn",  # 中国物流与采购联合会
+    "www.cmes.org", "cmes.org",                  # 中国机械工程学会 (learned society)
+    "nixtlaverse.nixtla.io", "nixtla.io",        # Nixtla open-source project own documentation
+    # conference / trade-show officials
+    "na.chainge.events", "chainge.events",       # ASCM CHAINge (annual conference official)
+    "www.hannovermesse.de", "hannovermesse.de",  # Hannover Messe
+    "www.logimat-messe.de", "logimat-messe.de",  # LogiMAT
+    "www.ciif-expo.com", "ciif-expo.com",        # 中国国际工业博览会
+    # podcasts publishing on their own domain
+    "supplychainnow.com", "www.supplychainnow.com",
+    "talkinglogistics.com", "www.talkinglogistics.com",
+    "autosupplychainprophets.com", "www.autosupplychainprophets.com",
+    # iter42 (supply-chain-ops 2026-09-02): manufacturing / supply-chain operations —
+    # standards & certification bodies that ORIGINATE the standard, and the
+    # method-originator institutes founded by the canon's own authors. Judgment
+    # test applied: "is this entity speaking about its own thing?" Media
+    # (SupplyChainDive / SCMR / IndustryWeek), analysts (Gartner / Forrester)
+    # and pure product-vendor pages deliberately NOT added — they stay
+    # secondary / surrogate_primary(vendor docs).
+    "ascm.org", "www.ascm.org",                  # ASCM — SCOR-DS + CPIM/CSCP/CLTD originator
+    "apics.org", "www.apics.org",                # APICS (ASCM legacy brand), same body
+    "iso.org", "www.iso.org",                    # ISO — 9001 / 28000 standards body
+    "iatfglobaloversight.org", "www.iatfglobaloversight.org",  # IATF 16949 (automotive QMS)
+    "aiag.org", "www.aiag.org",                  # AIAG — APQP / PPAP / FMEA originator
+    "asq.org", "www.asq.org",                    # ASQ — quality body of knowledge
+    "shingo.org", "www.shingo.org",              # Shingo Institute (Utah State) — Shingo Model
+    "iccwbo.org", "www.iccwbo.org",              # ICC — Incoterms originator
+    "gs1.org", "www.gs1.org",                    # GS1 — barcode / EPCIS supply-chain standards
+    "lean.org", "www.lean.org",                  # Lean Enterprise Institute (Womack's own institute)
+    "planet-lean.com", "www.planet-lean.com",    # LEI global network's own publication
+    "leanglobal.org", "www.leanglobal.org",      # Lean Global Network
+    "goldratt.com", "www.goldratt.com",          # Goldratt Consulting (TOC originator org)
+    "tocico.org", "www.tocico.org",              # TOCICO — TOC certification body
+    "tocinstitute.org", "www.tocinstitute.org",  # TOC Institute
+    "factoryphysics.com", "www.factoryphysics.com",  # Hopp & Spearman's own firm/method site
+    "demanddriveninstitute.com", "www.demanddriveninstitute.com",  # Ptak & Smith — DDMRP originator
+    "kaizen.com", "www.kaizen.com",              # Kaizen Institute (Masaaki Imai)
+    "global.toyota", "www.global.toyota",        # Toyota official global (TPS pages, first-party)
+    "toyota-global.com", "www.toyota-global.com",
     # iter41 (amazon-operating-model 2026-07-04): The Amazon Way — Amazon's OWN
     # first-party properties (company speaking about itself = originator primary):
     # newsroom + investor relations (hosts the 1997-2021 shareholder letters) + the
@@ -750,6 +809,16 @@ PRIMARY_DOMAIN_SUFFIXES: tuple[str, ...] = (
 # Known author / podcast / personal blog primaries (heuristic).
 # This list is non-exhaustive — agent can extend per industry research.
 PRIMARY_PERSONAL_DOMAINS: set[str] = {
+    # iter42b (supply-chain-ops 2026-09-02)
+    "scm-blog.com", "www.scm-blog.com",          # 刘宝红 own blog (供应链管理专栏)
+    "www.spcpress.com", "spcpress.com",          # Donald Wheeler's own imprint/site (SPC Press)
+    # iter42 (supply-chain-ops 2026-09-02): lean / operations authors publishing
+    # first-hand on their own sites.
+    "allaboutlean.com", "www.allaboutlean.com",  # Prof. Christoph Roser (Karlsruhe) own blog
+    "michelbaudin.com", "www.michelbaudin.com",  # Michel Baudin own blog
+    "leanblog.org", "www.leanblog.org",          # Mark Graban's Lean Blog (own publication)
+    "markgraban.com", "www.markgraban.com",      # Mark Graban own site
+    "mike-rother.com", "www.mike-rother.com",    # Mike Rother own site (Toyota Kata)
     # iter41 (amazon-operating-model 2026-07-04): ex-Amazon insider & concept-originator
     # own publications — first-hand accounts of mechanisms they personally operated.
     "www.scarletink.com", "scarletink.com",            # Dave Anderson(前 Amazon Bar Raiser)亲历

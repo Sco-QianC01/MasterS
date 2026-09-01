@@ -246,7 +246,7 @@ def build_time_decay_registry(synthesis_sections: dict[str, str], research_date:
 ## Time-decay Registry
 
 This skill's modules decay at different speeds. Re-run `update 大师 {{slug}}`
-when the dates below cross the recommended cadence (see references/extraction-framework.md § 八).
+when the dates below cross the recommended cadence listed in this table.
 
 | Module | last_updated | decay_risk | Recommended refresh cadence |
 |--------|-------------|-----------|---------------------------|

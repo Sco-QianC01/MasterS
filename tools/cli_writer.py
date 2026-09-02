@@ -353,10 +353,14 @@ def parse_workflows(workflows_path: Path) -> list:
     for m in wf_pattern.finditer(text):
         title = m.group(2).strip()
         body = m.group("body")
-        slug = slugify(title)
+        workflow_index += 1
+        # iter45: 标题形如 `选题与可行性判断 (Decay risk: low)`. slugify 会剥掉中文,
+        # 只剩下 ASCII 尾巴 `decay-risk-low` —— 14 条工作流因此塌成 3 个文件名,
+        # 后写的覆盖先写的, 11 条工作流的脚本直接丢失. 先摘掉这类元数据括号再 slugify.
+        title_for_slug = re.sub(r"[（(]\s*decay\s+risk[^）)]*[）)]", "", title, flags=re.IGNORECASE).strip()
+        slug = slugify(title_for_slug)
         # 中文 title 经 slugify 后会变 "untitled", 用 workflow-N 兜底
         if slug == "untitled":
-            workflow_index += 1
             slug = f"workflow-{workflow_index}"
 
         one_liner_m = re.search(r"\*\*One-liner\*\*[：:]\s*(.+?)$", body, re.MULTILINE)

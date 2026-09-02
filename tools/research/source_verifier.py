@@ -232,6 +232,15 @@ PRIMARY_DOMAINS_EXACT: set[str] = {
     "papers.nips.cc",
     "papers.neurips.cc",
     "proceedings.mlr.press",
+    # iter46 (robotics-embodied-ai): conference proceedings servers hosting the
+    # official open-access full text of their OWN accepted papers — the direct
+    # sibling of papers.neurips.cc / proceedings.mlr.press already above. Every
+    # technical field's canon track hits these, so this is a generic addition,
+    # not a robotics-specific one.
+    "www.roboticsproceedings.org", "roboticsproceedings.org",
+    "proceedings.neurips.cc",
+    "openaccess.thecvf.com",
+    "cdn.aaai.org", "ojs.aaai.org", "www.aaai.org", "aaai.org",
     "www.w3.org",
     "datatracker.ietf.org",
     "www.rfc-editor.org",
@@ -768,6 +777,78 @@ PRIMARY_DOMAINS_EXACT: set[str] = {
     "roifestival.com", "www.roifestival.com",    # 金投赏 ROI Festival
     "ana.net", "www.ana.net",                    # ANA (美国全国广告主协会)
     "www.ifac.org", "ifac.org",                  # 国际会计师联合会 (标准body)
+    # ------------------------------------------------------------------
+    # iter45 (academic-research-publishing 2026-09-02): scholarly publishing
+    # infrastructure. Every domain below hosts the thing it is first-hand FOR —
+    # a peer-reviewed article, a preprint, a deposited dataset, or a standard /
+    # declaration the body itself authored. Generic for ANY research-adjacent
+    # industry, not specific to this one. Media (Nature News is already covered
+    # by nature.com; THE / Chronicle / Inside Higher Ed / Retraction Watch are
+    # deliberately NOT here), analyst firms and vendor marketing pages stay out.
+    # ------------------------------------------------------------------
+    # Peer-reviewed journals / publisher article hosts (same tier as the
+    # already-listed nature.com / science.org / cell.com / thelancet.com).
+    "journals.plos.org", "www.plos.org", "plos.org",
+    "www.pnas.org", "pnas.org",
+    "www.bmj.com", "bmj.com",
+    "royalsocietypublishing.org", "www.royalsocietypublishing.org",
+    "elifesciences.org", "www.elifesciences.org",
+    "www.frontiersin.org", "frontiersin.org",
+    "www.cambridge.org", "cambridge.org",
+    "academic.oup.com",
+    "www.sciencedirect.com", "sciencedirect.com",
+    "psycnet.apa.org",
+    "www.nejm.org", "nejm.org",
+    "jamanetwork.com", "www.jamanetwork.com",
+    "www.annualreviews.org", "annualreviews.org",
+    # Preprint servers & data repositories (same tier as arxiv.org / ssrn).
+    "www.biorxiv.org", "biorxiv.org",
+    "www.medrxiv.org", "medrxiv.org",
+    "psyarxiv.com", "www.psyarxiv.com",
+    "osf.io", "www.osf.io",
+    "zenodo.org", "www.zenodo.org",
+    "datadryad.org", "www.datadryad.org",
+    "www.chinaxiv.org", "chinaxiv.org",
+    # Reporting-standard / research-integrity / scholarly-norm bodies publishing
+    # the standard they originate (sibling of the ISO / AIAG / ASQ / GS1 block).
+    "publicationethics.org", "www.publicationethics.org",
+    "www.icmje.org", "icmje.org",
+    "www.equator-network.org", "equator-network.org",
+    "www.prisma-statement.org", "prisma-statement.org",
+    "www.strobe-statement.org", "strobe-statement.org",
+    "www.consort-statement.org", "consort-statement.org",
+    "arriveguidelines.org", "www.arriveguidelines.org",
+    "www.spirit-statement.org", "spirit-statement.org",
+    "credit.niso.org", "www.niso.org", "niso.org",
+    "sfdora.org", "www.sfdora.org",
+    "www.leidenmanifesto.org", "leidenmanifesto.org",
+    "allea.org", "www.allea.org",
+    "www.wame.org", "wame.org",
+    "www.wcrif.org", "wcrif.org",
+    "thinkchecksubmit.org", "www.thinkchecksubmit.org",
+    "www.crossref.org", "crossref.org",
+    "www.doaj.org",
+    "www.coalition-s.org", "coalition-s.org",
+    "www.budapestopenaccessinitiative.org", "budapestopenaccessinitiative.org",
+    "www.force11.org", "force11.org",
+    # Method originators / open-science infrastructure orgs.
+    "www.cochrane.org", "cochrane.org", "training.cochrane.org",
+    "www.cos.io", "cos.io",
+    "www.bitss.org", "bitss.org",
+    "reproducibilitea.org", "www.reproducibilitea.org",
+    "metascience.info", "www.metascience.info",
+    "peerreviewcongress.org", "www.peerreviewcongress.org",
+    "www.improvingpsych.org", "improvingpsych.org",
+    # Learned societies / funders / research orgs speaking for themselves.
+    "royalsociety.org", "www.royalsociety.org",
+    "www.ukri.org", "ukri.org",
+    "www.acm.org", "acm.org",
+    "www.acs.org", "acs.org",
+    "www.hhmi.org", "hhmi.org",
+    "www.bwfund.org", "bwfund.org",
+    "www.psychologicalscience.org", "psychologicalscience.org",
+    "www.cas.cn", "cas.cn",
+    "www.fenqubiao.com", "fenqubiao.com",
 }
 
 # Suffix patterns for primary (TLD or sub-domain end-match).
@@ -789,6 +870,7 @@ PRIMARY_DOMAIN_SUFFIXES: tuple[str, ...] = (
     ".edu.tw",  # iter (semiconductor-process): Taiwan academic (NYCU/NTU 等) — IC 研究重镇
     ".chinalaw.gov.cn",
     ".readthedocs.io",  # iter 28: OSS project docs (read-the-docs hosted) — first-party
+    ".ros.org",  # iter46: ROS project's own official docs (docs./control./micro./design.)
     # iter 29 (study-camp-education): experiential-ed / camp / outdoor-ed standard
     # bodies, method originators, nonprofit canonical platforms, national gov edu
     # platform — genuine first-hand authorities (not commercial vendor marketing).
@@ -804,6 +886,10 @@ PRIMARY_DOMAIN_SUFFIXES: tuple[str, ...] = (
     # is an EU body (eur-lex 立法原文 / osha / ec / europarl). Legislation original
     # text = genuine verified_primary; recurs in any EU-regulated profession.
     ".europa.eu",
+    # iter45 (academic-research-publishing): BMC / SpringerOpen give every
+    # journal its own subdomain, so an exact-host list can never keep up.
+    ".biomedcentral.com",
+    ".springeropen.com",
 )
 
 # Known author / podcast / personal blog primaries (heuristic).
@@ -1008,6 +1094,23 @@ PRIMARY_PERSONAL_DOMAINS: set[str] = {
     "madisonavenuemanslaughter.com",                    # Michael Farmer 书官方站
     "agencymanagementinstitute.com", "www.agencymanagementinstitute.com",  # Drew McLellan AMI
     "buildabetteragency.libsyn.com",                    # AMI 播客 (Build a Better Agency)
+    # iter45 (academic-research-publishing 2026-09-02): research-methods and
+    # research-integrity authorities publishing first-hand on their own sites /
+    # book sites / podcasts. Investigative outlets (Retraction Watch, For Better
+    # Science) are deliberately NOT here — they are journalism about others and
+    # stay surrogate with an `own publication` note.
+    "datacolada.org", "www.datacolada.org",             # Simmons / Nelson / Simonsohn
+    "www.fharrell.com", "fharrell.com",                 # Frank Harrell (biostatistics)
+    "miguelhernan.org", "www.miguelhernan.org",         # Miguel Hernán (causal inference)
+    "xcelab.net", "www.xcelab.net",                     # Richard McElreath (Statistical Rethinking)
+    "errorstatistics.com", "www.errorstatistics.com",   # Deborah Mayo (severity / anti-abandon-significance)
+    "daniellakens.blogspot.com",                        # Daniël Lakens (The 20% Statistician)
+    "patthomson.net", "www.patthomson.net",             # Pat Thomson (academic writing)
+    "thesiswhisperer.com", "www.thesiswhisperer.com",   # Inger Mewburn
+    "researchwhisperer.org", "www.researchwhisperer.org",
+    "scienceintegritydigest.com", "www.scienceintegritydigest.com",  # Elisabeth Bik
+    "www.sciencefictions.org", "sciencefictions.org",   # Stuart Ritchie 书站
+    "everythinghertz.fireside.fm",                      # Everything Hertz 播客自有站
 }
 
 # Substack / Beehiiv-hosted newsletters: primary IF subdomain looks like an

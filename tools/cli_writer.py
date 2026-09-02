@@ -114,21 +114,43 @@ def parse_synthesis(synthesis_path: Path) -> dict:
     if sec2:
         # Rules use various connectors: 则 / 先...再 / 必须 / imperative.
         # Lenient pattern: \d+. **<bold>**[,，]? <rest until line end>
-        rule_pattern = re.compile(
-            r"^(\d+)\.\s+\*\*(.+?)\*\*[，,]?\s*(.+?)$",
-            re.MULTILINE,
-        )
+        # iter44 (quant-trading 2026-09-02): the old pattern required the rule to
+        # OPEN with a bold clause and treated that clause as the whole condition.
+        # The synthesis prompt's canonical shape is `**如果**X，**则**Y`, so the
+        # non-greedy `\*\*(.+?)\*\*` matched just "如果" — condition came out empty
+        # and the entire rule (including a literal `**则**` and the trailing
+        # `evidence: [...]`) leaked into the action, hence into the terminal UI.
+        # The stray `evidence` token also dominated anchor scoring, producing a
+        # bogus `cli/decision/evidence.sh` cluster. Parse the line first, then
+        # split on the 如果/则 connector; keep the old bold-prefix shape as a
+        # fallback for skills written before this format was standardised.
+        rule_pattern = re.compile(r"^(\d+)\.\s+(.+?)$", re.MULTILINE)
         for m in rule_pattern.finditer(sec2):
-            condition = m.group(2).strip()
-            action = m.group(3).strip()
-            # Strip "如果" prefix from condition
-            if condition.startswith("如果"):
-                condition = condition[2:].strip()
-            # Strip "则" / "先" prefix from action (keep "必须" since it's the verb)
-            if action.startswith("则"):
-                action = action[1:].strip()
+            raw = m.group(2).strip()
+            if "如果" not in raw and "**" not in raw:
+                continue
+            # Provenance markers are for the reader of synthesis.md, not for a CLI prompt.
+            raw = re.sub(r"\s*evidence:\s*\[[^\]]*\]", "", raw).strip()
+            connector = re.match(
+                r"^\*{0,2}如果\*{0,2}\s*(.+?)[，,]?\s*\*{0,2}则\*{0,2}\s*(.+)$", raw
+            )
+            if connector:
+                condition, action = connector.group(1), connector.group(2)
+            else:
+                fallback = re.match(r"^\*\*(.+?)\*\*[，,]?\s*(.+)$", raw)
+                if not fallback:
+                    continue
+                condition, action = fallback.group(1), fallback.group(2)
+                if condition.startswith("如果"):
+                    condition = condition[2:]
+                if action.startswith("则"):
+                    action = action[1:]
+            condition = condition.strip().strip("*").strip("，, ")
+            action = action.replace("**", "").strip()
             # Drop trailing period and any sub-clause after "."
             action = re.split(r"[.。]\s+", action)[0].rstrip(".。 ")
+            if not condition or not action:
+                continue
             out["playbook"].append({
                 "n": int(m.group(1)),
                 "condition": condition,

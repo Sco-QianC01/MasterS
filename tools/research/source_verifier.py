@@ -950,6 +950,23 @@ PRIMARY_PERSONAL_DOMAINS: set[str] = {
     "bbrt.org", "www.bbrt.org",                          # Beyond Budgeting Institute — 方法 originator
     "www.50xpodcast.com", "50xpodcast.com",              # William Thorndike 本人主持的播客主站
     "www.financialprofessionals.org", "financialprofessionals.org",  # AFP — 司库与 FP&A 协会
+    # iter44 (quant-trading 2026-09-02): trading-venue rule originators, protocol
+    # standards bodies and open-source trading-framework official docs. Same
+    # judgment test: the exchange IS the author of its own trading/risk rules
+    # (the ground truth a systematic trader must read), exactly like a regulator.
+    # Chinese exchanges are not under .gov.cn so the suffix rule misses them.
+    # Media, data vendors and broker marketing pages deliberately NOT added.
+    "www.sse.com.cn", "sse.com.cn",                      # 上海证券交易所 — 交易规则/程序化交易细则原文
+    "www.szse.cn", "szse.cn",                            # 深圳证券交易所
+    "www.bse.cn", "bse.cn",                              # 北京证券交易所
+    "www.shfe.com.cn", "shfe.com.cn",                    # 上海期货交易所
+    "www.cffex.com.cn", "cffex.com.cn",                  # 中国金融期货交易所 — 股指期货合约与异常交易标准
+    "www.czce.com.cn", "czce.com.cn",                    # 郑州商品交易所
+    "www.dce.com.cn", "dce.com.cn",                      # 大连商品交易所
+    "www.ine.cn", "ine.cn",                              # 上海国际能源交易中心
+    "www.gfex.com.cn", "gfex.com.cn",                    # 广州期货交易所
+    "www.fixtrading.org", "fixtrading.org",              # FIX Trading Community — FIX 协议标准 originator
+    "nautilustrader.io", "www.nautilustrader.io",        # NautilusTrader 官方文档 (开源项目一手)
     # Iter (product-ux-design): UX/design figures' & authors' OWN long-form sites /
     # official book sites — the figure/author speaking for themselves (parallel to
     # lexfridman.com / cambridge-mt.com). Genuine first-hand canon. Generic for any

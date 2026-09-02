@@ -350,6 +350,7 @@ def parse_workflows(workflows_path: Path) -> list:
     )
 
     workflow_index = 0
+    seen_slugs = set()
     for m in wf_pattern.finditer(text):
         title = m.group(2).strip()
         body = m.group("body")
@@ -359,34 +360,65 @@ def parse_workflows(workflows_path: Path) -> list:
         # 后写的覆盖先写的, 11 条工作流的脚本直接丢失. 先摘掉这类元数据括号再 slugify.
         title_for_slug = re.sub(r"[（(]\s*decay\s+risk[^）)]*[）)]", "", title, flags=re.IGNORECASE).strip()
         slug = slugify(title_for_slug)
-        # 中文 title 经 slugify 后会变 "untitled", 用 workflow-N 兜底
-        if slug == "untitled":
-            slug = f"workflow-{workflow_index}"
+        # iter46: 同一个坑的第二种形态 —— 中文标题里嵌一小段 ASCII (`演示与交付验收
+        # (POC vs 量产)` -> `poc-vs`), slugify 不返回 "untitled" 但拿到的名字既不可读
+        # 也极易碰撞. 判据改成「标题主体是中文而 ASCII 残渣很短」, 一律退回编号名.
+        cjk_count = len(re.findall(r"[\u4e00-\u9fff]", title_for_slug))
+        if slug == "untitled" or (cjk_count >= 4 and len(slug.replace("-", "")) < 8):
+            slug = f"workflow-{m.group(1)}"
+        # 落盘按名字写文件, 碰撞必须显式改名而不是静默覆盖 (lessons: 生成器 bug 会安静
+        # 地删掉产物). 同名即追加序号.
+        if slug in seen_slugs:
+            base, k = slug, 2
+            while slug in seen_slugs:
+                slug = f"{base}-{k}"
+                k += 1
+        seen_slugs.add(slug)
 
         one_liner_m = re.search(r"\*\*One-liner\*\*[：:]\s*(.+?)$", body, re.MULTILINE)
 
-        # Iter 26: tolerate both `- **入门 SOP**:\n  1. step` and inline
-        # `- 入门 SOP: 1) step1 2) step2` formats.
-        sop_m = re.search(
-            r"(?:\*\*入门 SOP\*\*|入门 SOP)[^：:\n]*[：:]\s*\n?(?P<list>.+?)"
-            r"(?=\n\s*-\s+(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|常见失败|来源|Last_updated)|\n\s*###|\Z)",
-            body, re.DOTALL,
-        )
-        sop_steps = []
-        if sop_m:
-            list_text = sop_m.group("list")
+        def _extract_steps(list_text: str) -> list:
+            steps = []
             # Try multi-line `1. ...` first
             for line in list_text.split("\n"):
                 step_m = re.match(r"\s*(\d+)\.\s+(.+)$", line)
                 if step_m:
-                    sop_steps.append(step_m.group(2).strip())
+                    steps.append(step_m.group(2).strip())
             # Fall back to inline `1) Step1 2) Step2 ...` if no multi-line steps
-            if not sop_steps:
+            if not steps:
                 inline_steps = re.findall(r"\d+\)\s+([^0-9)]+?)(?=\s*\d+\)|\s*$)", list_text)
-                sop_steps = [s.strip(" ;,，;") for s in inline_steps if s.strip(" ;,，;")]
+                steps = [x.strip(" ;,，;") for x in inline_steps if x.strip(" ;,，;")]
+            return steps
+
+        # Iter 26: tolerate both `- **入门 SOP**:\n  1. step` and inline
+        # `- 入门 SOP: 1) step1 2) step2` formats.
+        # iter46 (robotics-embodied-ai): 第三种形态 —— SOP 写成独立粗体标题
+        # `**入门 SOP（最少 6 步）**` + 换行 + 编号列表, 标题后没有冒号, 后一节
+        # `**资深路径**` 也不是 `- ` 列表项. 更阴的是同一张卡片末尾的「时间与人力量级」
+        # 里有一行 `- 入门 SOP：现场 1-2 天`, 带冒号, 旧正则**匹配到了它**, 于是
+        # sop_m 非 None 但一条编号步骤都抽不出 -> 13 条工作流全被丢弃 ->
+        # cli/workflow/ 整个目录不落盘, 退出码仍是 0. 所以判据必须是「抽到步骤没有」,
+        # 不是「正则匹配上没有」: 两个 pattern 都试, 谁抽出步骤用谁.
+        sop_patterns = [
+            r"(?:\*\*入门 SOP\*\*|入门 SOP)[^：:\n]*[：:]\s*\n?(?P<list>.+?)"
+            r"(?=\n\s*-\s+(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|常见失败|来源|Last_updated)|\n\s*###|\Z)",
+            r"(?:\*\*)?入门 SOP[^\n]*\n+(?P<list>.+?)"
+            r"(?=\n\s*\*\*[^*\n]+\*\*\s*(?:\n|$)"
+            r"|\n\s*-?\s*(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|"
+            r"常见失败|判断这一步|时间与人力|来源|Last_updated)|\n\s*###|\Z)",
+        ]
+        sop_steps = []
+        for pat in sop_patterns:
+            for cand in re.finditer(pat, body, re.DOTALL):
+                steps = _extract_steps(cand.group("list"))
+                if len(steps) > len(sop_steps):
+                    sop_steps = steps
+            if sop_steps:
+                break
 
         fail_m = re.search(
-            r"\*\*常见失败模式\*\*[：:]?\s*\n(?P<list>.+?)(?=\n- \*\*来源|\n- \*\*Last_updated|\Z)",
+            r"\*\*常见失败模式\*\*[：:]?\s*\n(?P<list>.+?)"
+            r"(?=\n- \*\*来源|\n- \*\*Last_updated|\n\s*\*\*[^*\n]+\*\*\s*(?:\n|$)|\n\s*###|\Z)",
             body, re.DOTALL,
         )
         failure_modes = []

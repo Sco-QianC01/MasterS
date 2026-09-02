@@ -1,0 +1,45 @@
+{
+  "industry": "Robotics & Embodied AI engineering — building physical robots (arms, mobile manipulators, humanoids, legged platforms) that perceive, plan and act reliably in the real world: control & motion planning, perception & state estimation, simulation and sim-to-real transfer, imitation learning / RL / vision-language-action (VLA) models, data collection via teleoperation, and the deployment engineering (calibration, safety, reliability, cost) that decides whether a demo becomes a product. Audience: robotics engineers, embodied-AI researchers-turned-engineers, and technical founders shipping real hardware. Excludes: passenger-car autonomous driving stacks, pure-software LLM agent infrastructure, and mechanical/semiconductor manufacturing process engineering.",
+  "industry_cn": "机器人与具身智能",
+  "industry_en": "Robotics and Embodied AI",
+  "scope_detail": "(a) 第一性张力 —— 经典模型与控制 ⇄ 端到端学习(一派要求动力学模型、可证明的稳定性与可解释的失败模式,另一派认为手写模型在接触丰富的操作任务上必然写不全,只信数据与策略网络;两派对同一个任务给出完全不同的开发路径);仿真里跑通 ⇄ 真机上站得住(sim-to-real gap 是本行的核心技术税:接触与摩擦建模、传感器噪声、执行器延迟与齿隙、域随机化的代价与上限);数据从哪来(人类遥操作采集 ⇄ 仿真批量生成 ⇄ 互联网视频与跨本体数据集,三条路线的成本结构、可迁移性与偏差完全不同);通用具身大模型 ⇄ 专用小模型加工程约束(VLA 的泛化承诺 vs 一条产线只要 99.9% 成功率的单任务策略);人形本体 ⇄ 任务专用形态(人形的通用性叙事与其自由度、成本、可靠性代价);演示视频 ⇄ 可交付可靠性(成功率口径、MTBF、循环时间、换型时间、异常恢复);开源生态 ⇄ 闭源数据与本体壁垒;实验室指标 ⇄ 现场经济性(单位成本、部署周期、维护、集成商与最终用户的账本)。(b) 工具栈 —— 中间件与本体软件(ROS 2 及其 DDS 与实时性、控制器接口、驱动与总线 EtherCAT/CAN)、仿真与并行训练(Isaac Sim / Isaac Lab、MuJoCo(含 MJX)、Gazebo、Genesis 等)、运动规划与控制(MoveIt、OMPL、TrajOpt/CHOMP、MPC、全身控制与 QP、阻抗与导纳控制、力控)、感知与状态估计(标定与手眼标定、点云与位姿估计、SLAM 与里程计、触觉)、学习栈(行为克隆、ACT、Diffusion Policy、离线与在线 RL、VLA 与开放数据集 Open X-Embodiment/DROID、LeRobot)、数据采集与遥操作(主从遥操、动捕手套、VR 手柄、低成本采集臂)、部署与运维(实时性、日志与回放、故障注入、OTA、安全 PLC 与安全监控)。(c) 心智模型层 —— 先问任务能不能被结构化掉(夹具与工装常常比算法便宜);接触是本行最难建模的东西;误差预算要从末端反推到标定、传感器、执行器与结构;泛化不是免费的,它是数据分布与本体一致性的函数;仿真是用来做筛选与训练的,不是用来证明可行的;成功率必须给分母;安全不是模块而是约束整个设计;可靠性是长尾工程,不是模型问题。(d) 工作流 —— 需求与任务定义、可行性与形态选型、误差预算与硬件选型、标定与基础设施搭建、仿真环境与资产准备、策略/规划方案开发、数据采集与训练循环、sim-to-real 迁移与真机调试、评测协议与成功率统计、安全评估与合规、现场部署与集成、监控与失败复盘、迭代与换型。(e) 表达 DNA、质量基准(什么算一次可信的机器人评测与一次合格的现场交付)、反模式(只看 demo、成功率不给分母、仿真调好直接上真机、忽略标定与误差预算、用视觉硬解本可以用夹具解决的问题、把遥操作数据当成自主性能、忽视循环时间与换型成本、把安全评估留到最后)、智识谱系(经典控制与机器人学派、基于优化的规划与全身控制派、概率机器人与状态估计派、深度强化学习与仿真规模化派、模仿学习与真机数据派、具身大模型/VLA 派、工业机器人集成与安全工程派、中国本体厂商与产业落地派)。",
+  "industry_type": "zh-CN-audience / en-primary-canon 的机器人与具身智能工程领域;面向机器人工程师、具身智能研究转工程的人、以及做硬件产品的技术创始人;NOT 乘用车自动驾驶栈, NOT 纯软件 LLM agent 基础设施, NOT 半导体制造工艺, NOT 传统 PLC 产线电气设计",
+  "slug": "robotics-embodied-ai",
+  "title": "机器人与具身智能",
+  "focus": "comprehensive",
+  "locale": "zh-CN",
+  "profile": "practitioner",
+  "skip_sub_skills": true,
+  "local_materials": {
+    "mode": "none",
+    "paths": [],
+    "covered_tracks": []
+  },
+  "existing_skill": {
+    "found": false,
+    "path": null,
+    "last_research_date": null,
+    "decision": "new"
+  },
+  "triggers": [
+    "机器人", "具身智能", "embodied AI", "robotics", "机械臂", "人形机器人", "humanoid",
+    "四足机器人", "协作机器人", "cobot", "移动操作", "mobile manipulation",
+    "ROS", "ROS 2", "MoveIt", "运动规划", "motion planning", "轨迹优化", "逆运动学",
+    "全身控制", "whole-body control", "MPC", "模型预测控制", "阻抗控制", "力控", "导纳控制",
+    "SLAM", "状态估计", "位姿估计", "手眼标定", "标定", "视觉伺服", "点云", "抓取", "grasping", "灵巧手",
+    "仿真", "sim-to-real", "域随机化", "domain randomization", "Isaac Sim", "Isaac Lab", "MuJoCo", "Gazebo",
+    "模仿学习", "imitation learning", "行为克隆", "diffusion policy", "ACT", "LeRobot",
+    "强化学习", "reinforcement learning", "VLA", "vision-language-action", "具身大模型",
+    "Open X-Embodiment", "遥操作", "teleoperation", "数据采集",
+    "EtherCAT", "实时性", "误差预算", "循环时间", "成功率",
+    "ISO 10218", "ISO/TS 15066", "机器人安全", "风险评估",
+    "工业机器人", "机器人落地", "机器人集成", "宇树", "优必选"
+  ],
+  "warnings": [
+    "locale=zh-CN 受众 / en 一手正典:本行方法论的一手材料几乎全是英文(arXiv 与 ICRA/RSS/CoRL/IROS 论文、实验室与项目官方页、ROS 2 / Isaac / MuJoCo / MoveIt 官方文档);中文一手集中在国家标准与监管原文、国家与地方产业政策文件、高校实验室与本体厂商(宇树、优必选、节卡、遨博、埃斯顿、大族、达闼等)的官方发布与自有出版物。大量中文实务内容落在知乎、微信公众号、CSDN、百度百科等黑名单平台,synthesis 只用英文一手 + 中文官方一手,绝不用中文二手转述撑一手率。",
+    "演示视频不等于可交付性能:本行公开材料的最大系统性偏差是 demo 剪辑与评测口径不透明(遥操作介入、多次重试取最佳、受控光照与固定工位、只报最好的一次)。任何『成功率 X%』『泛化到 N 个任务』的说法必须标明:仿真还是真机、任务数与试验次数(分母)、是否新物体/新场景、是否有人工介入或重试、谁在说这句话以及他的利益关系;没有分母的成功率一律不写进 SKILL.md。",
+    "安全与合规红线:只呈现公开标准与监管的官方口径(ISO 10218-1/-2:2025 工业机器人安全、ISO/TS 15066 协作机器人功率与力限制、ISO 12100 风险评估、IEC 61508/62061 功能安全、中国 GB 11291 系列与相关强制性国标),并标注版本与生效时间;绝不给出绕过风险评估、屏蔽安全监控、超速或超力运行的操作建议,相关内容一律作为红线与义务呈现。",
+    "厂商营销页、融资通稿(businesswire/prnewswire 类)与榜单站不入 manifest;厂商与开源项目的官方技术文档、实验室项目页、作者本人博客可标 verified_primary 或 surrogate_primary,note 写 vendor docs / own site / originator。",
+    "边界:乘用车自动驾驶栈(感知-预测-规控的车规工程)、纯软件 LLM agent 基础设施(已由 llm-agent-infra-master 覆盖)、半导体制造工艺(semiconductor-process-master)不在本 skill 主线;仅在共享方法(感知、规划、仿真、数据闭环、评测)处作对比提及。"
+  ]
+}

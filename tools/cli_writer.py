@@ -114,21 +114,43 @@ def parse_synthesis(synthesis_path: Path) -> dict:
     if sec2:
         # Rules use various connectors: 则 / 先...再 / 必须 / imperative.
         # Lenient pattern: \d+. **<bold>**[,，]? <rest until line end>
-        rule_pattern = re.compile(
-            r"^(\d+)\.\s+\*\*(.+?)\*\*[，,]?\s*(.+?)$",
-            re.MULTILINE,
-        )
+        # iter44 (quant-trading 2026-09-02): the old pattern required the rule to
+        # OPEN with a bold clause and treated that clause as the whole condition.
+        # The synthesis prompt's canonical shape is `**如果**X，**则**Y`, so the
+        # non-greedy `\*\*(.+?)\*\*` matched just "如果" — condition came out empty
+        # and the entire rule (including a literal `**则**` and the trailing
+        # `evidence: [...]`) leaked into the action, hence into the terminal UI.
+        # The stray `evidence` token also dominated anchor scoring, producing a
+        # bogus `cli/decision/evidence.sh` cluster. Parse the line first, then
+        # split on the 如果/则 connector; keep the old bold-prefix shape as a
+        # fallback for skills written before this format was standardised.
+        rule_pattern = re.compile(r"^(\d+)\.\s+(.+?)$", re.MULTILINE)
         for m in rule_pattern.finditer(sec2):
-            condition = m.group(2).strip()
-            action = m.group(3).strip()
-            # Strip "如果" prefix from condition
-            if condition.startswith("如果"):
-                condition = condition[2:].strip()
-            # Strip "则" / "先" prefix from action (keep "必须" since it's the verb)
-            if action.startswith("则"):
-                action = action[1:].strip()
+            raw = m.group(2).strip()
+            if "如果" not in raw and "**" not in raw:
+                continue
+            # Provenance markers are for the reader of synthesis.md, not for a CLI prompt.
+            raw = re.sub(r"\s*evidence:\s*\[[^\]]*\]", "", raw).strip()
+            connector = re.match(
+                r"^\*{0,2}如果\*{0,2}\s*(.+?)[，,]?\s*\*{0,2}则\*{0,2}\s*(.+)$", raw
+            )
+            if connector:
+                condition, action = connector.group(1), connector.group(2)
+            else:
+                fallback = re.match(r"^\*\*(.+?)\*\*[，,]?\s*(.+)$", raw)
+                if not fallback:
+                    continue
+                condition, action = fallback.group(1), fallback.group(2)
+                if condition.startswith("如果"):
+                    condition = condition[2:]
+                if action.startswith("则"):
+                    action = action[1:]
+            condition = condition.strip().strip("*").strip("，, ")
+            action = action.replace("**", "").strip()
             # Drop trailing period and any sub-clause after "."
             action = re.split(r"[.。]\s+", action)[0].rstrip(".。 ")
+            if not condition or not action:
+                continue
             out["playbook"].append({
                 "n": int(m.group(1)),
                 "condition": condition,
@@ -328,39 +350,75 @@ def parse_workflows(workflows_path: Path) -> list:
     )
 
     workflow_index = 0
+    seen_slugs = set()
     for m in wf_pattern.finditer(text):
         title = m.group(2).strip()
         body = m.group("body")
-        slug = slugify(title)
-        # 中文 title 经 slugify 后会变 "untitled", 用 workflow-N 兜底
-        if slug == "untitled":
-            workflow_index += 1
-            slug = f"workflow-{workflow_index}"
+        workflow_index += 1
+        # iter45: 标题形如 `选题与可行性判断 (Decay risk: low)`. slugify 会剥掉中文,
+        # 只剩下 ASCII 尾巴 `decay-risk-low` —— 14 条工作流因此塌成 3 个文件名,
+        # 后写的覆盖先写的, 11 条工作流的脚本直接丢失. 先摘掉这类元数据括号再 slugify.
+        title_for_slug = re.sub(r"[（(]\s*decay\s+risk[^）)]*[）)]", "", title, flags=re.IGNORECASE).strip()
+        slug = slugify(title_for_slug)
+        # iter46: 同一个坑的第二种形态 —— 中文标题里嵌一小段 ASCII (`演示与交付验收
+        # (POC vs 量产)` -> `poc-vs`), slugify 不返回 "untitled" 但拿到的名字既不可读
+        # 也极易碰撞. 判据改成「标题主体是中文而 ASCII 残渣很短」, 一律退回编号名.
+        cjk_count = len(re.findall(r"[\u4e00-\u9fff]", title_for_slug))
+        if slug == "untitled" or (cjk_count >= 4 and len(slug.replace("-", "")) < 8):
+            slug = f"workflow-{m.group(1)}"
+        # 落盘按名字写文件, 碰撞必须显式改名而不是静默覆盖 (lessons: 生成器 bug 会安静
+        # 地删掉产物). 同名即追加序号.
+        if slug in seen_slugs:
+            base, k = slug, 2
+            while slug in seen_slugs:
+                slug = f"{base}-{k}"
+                k += 1
+        seen_slugs.add(slug)
 
         one_liner_m = re.search(r"\*\*One-liner\*\*[：:]\s*(.+?)$", body, re.MULTILINE)
 
-        # Iter 26: tolerate both `- **入门 SOP**:\n  1. step` and inline
-        # `- 入门 SOP: 1) step1 2) step2` formats.
-        sop_m = re.search(
-            r"(?:\*\*入门 SOP\*\*|入门 SOP)[^：:\n]*[：:]\s*\n?(?P<list>.+?)"
-            r"(?=\n\s*-\s+(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|常见失败|来源|Last_updated)|\n\s*###|\Z)",
-            body, re.DOTALL,
-        )
-        sop_steps = []
-        if sop_m:
-            list_text = sop_m.group("list")
+        def _extract_steps(list_text: str) -> list:
+            steps = []
             # Try multi-line `1. ...` first
             for line in list_text.split("\n"):
                 step_m = re.match(r"\s*(\d+)\.\s+(.+)$", line)
                 if step_m:
-                    sop_steps.append(step_m.group(2).strip())
+                    steps.append(step_m.group(2).strip())
             # Fall back to inline `1) Step1 2) Step2 ...` if no multi-line steps
-            if not sop_steps:
+            if not steps:
                 inline_steps = re.findall(r"\d+\)\s+([^0-9)]+?)(?=\s*\d+\)|\s*$)", list_text)
-                sop_steps = [s.strip(" ;,，;") for s in inline_steps if s.strip(" ;,，;")]
+                steps = [x.strip(" ;,，;") for x in inline_steps if x.strip(" ;,，;")]
+            return steps
+
+        # Iter 26: tolerate both `- **入门 SOP**:\n  1. step` and inline
+        # `- 入门 SOP: 1) step1 2) step2` formats.
+        # iter46 (robotics-embodied-ai): 第三种形态 —— SOP 写成独立粗体标题
+        # `**入门 SOP（最少 6 步）**` + 换行 + 编号列表, 标题后没有冒号, 后一节
+        # `**资深路径**` 也不是 `- ` 列表项. 更阴的是同一张卡片末尾的「时间与人力量级」
+        # 里有一行 `- 入门 SOP：现场 1-2 天`, 带冒号, 旧正则**匹配到了它**, 于是
+        # sop_m 非 None 但一条编号步骤都抽不出 -> 13 条工作流全被丢弃 ->
+        # cli/workflow/ 整个目录不落盘, 退出码仍是 0. 所以判据必须是「抽到步骤没有」,
+        # 不是「正则匹配上没有」: 两个 pattern 都试, 谁抽出步骤用谁.
+        sop_patterns = [
+            r"(?:\*\*入门 SOP\*\*|入门 SOP)[^：:\n]*[：:]\s*\n?(?P<list>.+?)"
+            r"(?=\n\s*-\s+(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|常见失败|来源|Last_updated)|\n\s*###|\Z)",
+            r"(?:\*\*)?入门 SOP[^\n]*\n+(?P<list>.+?)"
+            r"(?=\n\s*\*\*[^*\n]+\*\*\s*(?:\n|$)"
+            r"|\n\s*-?\s*(?:\*\*)?(?:资深|每一步|近期变化|典型耗时|关键工具|关键人物|"
+            r"常见失败|判断这一步|时间与人力|来源|Last_updated)|\n\s*###|\Z)",
+        ]
+        sop_steps = []
+        for pat in sop_patterns:
+            for cand in re.finditer(pat, body, re.DOTALL):
+                steps = _extract_steps(cand.group("list"))
+                if len(steps) > len(sop_steps):
+                    sop_steps = steps
+            if sop_steps:
+                break
 
         fail_m = re.search(
-            r"\*\*常见失败模式\*\*[：:]?\s*\n(?P<list>.+?)(?=\n- \*\*来源|\n- \*\*Last_updated|\Z)",
+            r"\*\*常见失败模式\*\*[：:]?\s*\n(?P<list>.+?)"
+            r"(?=\n- \*\*来源|\n- \*\*Last_updated|\n\s*\*\*[^*\n]+\*\*\s*(?:\n|$)|\n\s*###|\Z)",
             body, re.DOTALL,
         )
         failure_modes = []

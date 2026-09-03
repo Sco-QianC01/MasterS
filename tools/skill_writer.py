@@ -237,23 +237,77 @@ def count_research_sources(research_dir: Path) -> dict[str, int]:
     }
 
 
+SKILL_DESCRIPTION_MAX = 1024  # Agent Skills spec cap for frontmatter `description`
+
+
+def short_industry_name(intake: dict) -> str:
+    """iter45: Phase 0 intake often stores a full scope paragraph in `industry`
+    (observed: 1,677 chars). The template splices that field into `description`
+    three times, producing a frontmatter that blew past the 1024-char spec cap
+    by 5x and read `X (X (English) - ...)`. Derive a real name instead: prefer
+    `industry_en`, cut at the first bracket / em-dash / full stop, cap at 80.
+    """
+    raw = (intake.get("industry_en") or intake.get("industry") or "").strip()
+    for sep in (" (", "（", " — ", " - ", "。", "；", ";"):
+        idx = raw.find(sep)
+        if idx > 0:
+            raw = raw[:idx]
+            break
+    raw = raw.strip().rstrip(",，、")
+    return raw[:80] if raw else (intake.get("industry_cn") or "")
+
+
+def clamp_frontmatter_description(skill_md: str, limit: int = SKILL_DESCRIPTION_MAX) -> str:
+    """iter45: hard-clamp the YAML `description:` block so a runaway intake field
+    can never ship a frontmatter that exceeds the Agent Skills cap. Keeps the
+    block-scalar form and trims on a sentence boundary where one is available.
+    """
+    m = re.search(r"^description:\s*\|\s*\n((?:(?:[ \t]+.*)?\n)+)", skill_md, re.MULTILINE)
+    if not m:
+        return skill_md
+    body = m.group(1)
+    text = " ".join(line.strip() for line in body.splitlines() if line.strip())
+    if len(text) <= limit:
+        return skill_md
+    cut = text[:limit]
+    for sep in ("。", ". ", "；", "; "):
+        idx = cut.rfind(sep)
+        if idx > limit * 0.5:
+            cut = cut[:idx + len(sep)]
+            break
+    return skill_md[:m.start(1)] + "  " + cut.strip() + "\n" + skill_md[m.end(1):]
+
+
+def _decay_risk_from_section(section: str, default: str) -> str:
+    """iter45: the registry used to hardcode `high` for tool stack + workflows,
+    which contradicted any synthesis declaring `Decay risk: medium` for the same
+    module. Read the synthesis instead; fall back to the old default.
+    """
+    if not section:
+        return default
+    m = re.search(r"Decay\s+risk:\s*(low|medium|high)", section, re.IGNORECASE)
+    return m.group(1).lower() if m else default
+
+
 def build_time_decay_registry(synthesis_sections: dict[str, str], research_date: str) -> str:
     """Iter 22 fix #3: emit explicit `last_updated` + `decay_risk` markers per
     module so quality_check.check_time_decay_marks() finds them. Synthesis often
     uses prose dates; this registry uses the regex-friendly format.
     """
+    tool_risk = _decay_risk_from_section(synthesis_sections.get("tool_stack", ""), "high")
+    wf_risk = _decay_risk_from_section(synthesis_sections.get("workflows", ""), "high")
     return f"""
 ## Time-decay Registry
 
 This skill's modules decay at different speeds. Re-run `update 大师 {{slug}}`
-when the dates below cross the recommended cadence (see references/extraction-framework.md § 八).
+when the dates below cross the recommended cadence listed in this table.
 
 | Module | last_updated | decay_risk | Recommended refresh cadence |
 |--------|-------------|-----------|---------------------------|
 | Mental models | last_updated: {research_date} | decay_risk: low | 1-2 years |
 | Standard playbook | last_updated: {research_date} | decay_risk: low | 6-12 months |
-| Tool stack | last_updated: {research_date} | decay_risk: high | 3-6 months |
-| Workflows / pipeline | last_updated: {research_date} | decay_risk: high | 3-6 months |
+| Tool stack | last_updated: {research_date} | decay_risk: {tool_risk} | 3-6 months |
+| Workflows / pipeline | last_updated: {research_date} | decay_risk: {wf_risk} | 3-6 months |
 | Expression DNA | last_updated: {research_date} | decay_risk: low | 6-12 months |
 | Sources (Track 5) | last_updated: {research_date} | decay_risk: medium | 6 months |
 | Glossary / standards / regulations | last_updated: {research_date} | decay_risk: medium | 6 months (regulations may force sooner) |
@@ -668,21 +722,22 @@ def action_create(
 
     # display_name: 中文 locale 时用 industry_cn, 其他用 industry. 让 body 文案
     # 在中文 skill 里读起来不生硬 (避免 "收到与 foot and ankle surgery 相关的问题时").
-    display_name = industry_cn if locale.startswith("zh") else industry
+    industry_short = short_industry_name(intake)
+    display_name = industry_cn if locale.startswith("zh") else industry_short
 
     # Replacements for the template's {{...}} placeholders
     replacements = {
         "industry-slug": slug,
         "industry-cn-name": industry_cn,
-        "industry-en-name": industry,
+        "industry-en-name": industry_short,
         "industry-display-name": display_name,
         "one-sentence value prop, e.g. \"automated mastery of LLM agent infrastructure: top builders' mental models, tool stack, current workflows, jargon, and where to keep up\".":
-            f"automated mastery of {industry}: top builders' mental models, tool stack, current workflows, jargon, and where to keep up.",
+            f"automated mastery of {industry_short}: top builders' mental models, tool stack, current workflows, jargon, and where to keep up.",
         "trigger-cn-1": triggers[0] if len(triggers) > 0 else "造大师",
         "trigger-cn-2": triggers[1] if len(triggers) > 1 else f"{industry_cn} master",
         "trigger-cn-3": triggers[2] if len(triggers) > 2 else f"我做 {industry_cn}",
-        "trigger-en-1": triggers[3] if len(triggers) > 3 else industry,
-        "trigger-en-2": triggers[4] if len(triggers) > 4 else f"{industry} infra",
+        "trigger-en-1": triggers[3] if len(triggers) > 3 else industry_short,
+        "trigger-en-2": triggers[4] if len(triggers) > 4 else f"{industry_short} infra",
         "en | zh-CN | ja | ko | global": locale,
         "YYYY-MM-DD": research_date,
         "N": str(research_stats_for_template.get("total") or intake.get("source_count", 0)),
@@ -691,7 +746,7 @@ def action_create(
         "punchy one-liner — what this skill changes for the agent. Quote a top figure if natural.":
             (f"装上这个 skill, agent 立刻进入「{display_name}」资深人模式 — 用这一行的心智模型 + 决策规则 + 工作流 + 说话方式 给判断。"
              if locale.startswith("zh")
-             else f"This skill makes the agent operate as a senior {industry} practitioner — applying the field's mental models, picking the right tools, knowing the current workflows, speaking the jargon."),
+             else f"This skill makes the agent operate as a senior {industry_short} practitioner — applying the field's mental models, picking the right tools, knowing the current workflows, speaking the jargon."),
         "trigger-list": ", ".join(triggers) or "industry-specific keywords",
     }
 
@@ -699,6 +754,8 @@ def action_create(
     skill_md = template
     for placeholder, value in sorted(replacements.items(), key=lambda kv: -len(kv[0])):
         skill_md = skill_md.replace("{{" + placeholder + "}}", value)
+
+    skill_md = clamp_frontmatter_description(skill_md)
 
     # iter 22 fix #1: inject synthesis body in place of the template's
     # placeholder body sections. Replaces the previous shell-only output.
